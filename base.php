@@ -25,15 +25,16 @@
         get_template_part('templates/header');
     ?>
 
-    <div class="wrap" role="document">
+    <div class="wrap" role="document" style="<?php Utils\sage_bind_page_bg(); ?>">
 
-        <main class="main" role="main">
-            <?php include Wrapper\template_path(); ?>
-        </main><!-- /.main -->
+      <main class="main" role="main">
+          <?php include Wrapper\template_path(); ?>
+      </main><!-- /.main -->
 
     </div><!-- /.wrap -->
 
     <?php
+        do_action('sage/get_contact_form');
         do_action('get_footer');
         get_template_part('templates/footer');
         wp_footer();

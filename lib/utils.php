@@ -177,35 +177,105 @@ function sage_has_sub_field( $key, $id=false ) {
 
 
 /**
+ * Flexible Layout content
+ */
+
+function sage_get_row_content ( $row ) {
+
+    $sections      = array();
+    $layout        = $row['acf_fc_layout'];
+    $prefix        = $layout .'_';
+    $section_id    = uniqid($prefix);
+    $section_title = $row['title'];
+
+    if ($layout === 'editor' && $row['content']) {
+      $sections[] = sprintf('<div class="section-content">%s</div>', $row['content']);
+    } elseif ($layout === 'contact' && $row['contact']) {
+
+      foreach ($row['contact'] as $item) {
+        $contacts[] = <<<EOT
+          <li>
+            <span class="hexagon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-{$item['icon']}">
+                <use xlink:href="#{$item['icon']}"></use>
+              </svg>
+            </span>
+            <h2 class="title">{$item['title']}</h2>
+            <div class="content">{$item['content']}</div>
+          </li>
+EOT;
+      }
+      $sections[] = sprintf('<div class="section-content"><ul class="contacts">%s</ul></div>', implode('', $contacts));
+    }
+
+    $section_title_html = ($section_title) ? sprintf('<h3 class="section-title">%s</h3>', $section_title) : '';
+    $section_content_html = implode('', $sections);
+
+    return <<<EOT
+      <div id="{$section_id}" class="section-layout-{$layout}">
+        {$section_title_html}
+        {$section_content_html}
+      </div>
+EOT;
+
+}
+
+
+/**
+ * Creates flexible content instanse
+ * @param mixed $name Flexible content name
+ * @return 'string'
+ * @uses sage_init_flexible_content( $name )
+ */
+
+function sage_flexible_content($field_name = 'extra_content') {
+
+    if (!$field_name) return;
+
+    $field_data = sage_get_field( $field_name );
+
+    // check if the flexible content field exists
+    if( !$field_data ) return;
+
+    // loop through the rows of data
+    while ( have_rows($field_name) ) : $row = the_row();
+
+        // setup data to pass
+        $row_data = get_row($row);
+
+        // collect layout content
+        return sage_get_row_content($row_data);
+
+    endwhile;
+}
+
+
+/**
  *  Header Logo
  */
 
 function sage_header_logo() {
 
-    $options = sage_get_options();
-    $logo_image = $options['logo'];
+    $tag = (is_front_page()) ? 'h1' : 'strong'; ?>
 
-    if($logo_image) {
+    <div class="navbar-brand-wrapper">
+      <a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>" title="<?php echo get_bloginfo('name'); ?>">
+        <?php if (has_site_icon()) : ?>
+          <img class="brand-img" src="<?php echo get_site_icon_url(190); ?>" alt="<?php echo get_bloginfo('name'); ?>">
+        <?php endif; ?>
+        <div class="brand-text">
+          <<?php echo $tag; ?>><?php echo get_bloginfo('title'); ?></<?php echo $tag; ?>>
+          <p><?php echo get_bloginfo('description'); ?></p>
+        </div>
+      </a>
+    </div>
 
-        $logo_html = sprintf('<img src="%s" alt="%s">',
-            $logo_image['url'],
-            get_bloginfo('name')
-        );
-
-
-        printf('<%1$s class="navbar-brand-wrapper"><a class="%2$s" href="%3$s">%4$s</a></%1$s>',
-            (is_front_page()) ? 'h1' : 'strong',
-            'navbar-brand withoutripple',
-            esc_url(home_url('/')),
-            $logo_html
-        );
-
-    }
-}
+<?php }
 
 
 /**
  *  Header navbar class
+ *  @todo adjust to new position modes(normal/sticky)
  */
 
 function sage_header_navbar_class() {
@@ -213,7 +283,7 @@ function sage_header_navbar_class() {
     $options = sage_get_options();
 
     $navbar_position = $options['navbar_position'];
-    $navbar_class = $navbar_position ? 'navbar-'. $navbar_position : 'navbar-static-top';
+    $navbar_class = $navbar_position ? 'navbar-' . $navbar_position : 'navbar-static';
 
     echo $navbar_class;
 
@@ -230,4 +300,55 @@ function sage_info() {
     if($options['content-info']) printf('<div class="info">%s</div>',
         $options['content-info']
     );
+}
+
+
+/**
+ *  Page header
+ */
+
+function sage_page_header($post_id=false) {
+
+  global $post;
+
+  if (isset($post->ID) && !$post_id) $post_id = $post->ID;
+
+  $thumb_id = get_post_thumbnail_id( $post_id );
+  $src = wp_get_attachment_image_src($thumb_id, 'full');
+
+  $style = array(
+    'background-image'  => 'url('. $src[0] .')'
+  );
+
+  array_walk($style, function(&$a, $b) { $a = "$b: $a"; });
+
+  $title = sage_get_field('title_text') ? sage_get_field('title_text') : Titles\title();
+  $tag = is_front_page() ? 'h2' : 'h1';
+  ?>
+
+  <div class="page-header" style="<?php echo implode('; ', $style); ?>">
+    <<?php echo $tag; ?> class="title"><?php echo $title; ?></<?php echo $tag; ?>>
+  </div>
+
+  <?php
+}
+
+
+/**
+ *  Apply background
+ */
+function sage_bind_page_bg() {
+  $options = sage_get_options();
+  $id = $options['page_background'];
+  $src = wp_get_attachment_image_src($id, 'full');
+
+  if ($src) {
+    $style = array(
+      'background-image'  => 'url('. $src[0] .')'
+    );
+
+    array_walk($style, function(&$a, $b) { $a = "$b: $a"; });
+
+    echo implode('; ', $style);
+  }
 }

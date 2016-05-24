@@ -71,42 +71,6 @@ function setup() {
 
 
 /**
- * Custom Post Type
- */
-
-add_action( 'init', __NAMESPACE__ . '\\create_custom_post_types' );
-
-function create_custom_post_types() {
-
-  // Estate Sales CPT
-  register_post_type( 'product',
-    array(
-      'labels' => array(
-        'name' => __( 'Products' ),
-        'singular_name' => __( 'Product' ),
-        'add_new' => __( 'Add Product' ),
-        'add_new_item' => __( 'Add New Product' ),
-      ),
-      'rewrite' => array('slug' => __( 'products' )),
-      'public' => true,
-      'exclude_from_search' => false,
-      'has_archive' => true,
-      'hierarchical' => true,
-      'capability_type' => 'post',
-      'can_export' => true,
-      'menu_position' => 25,
-      'menu_icon' => 'dashicons-cart',
-      'supports' => array(
-        'title',
-        'editor',
-        'thumbnail'
-      )
-    )
-  );
-}
-
-
-/**
  * Theme assets
  */
 
@@ -121,7 +85,7 @@ function sage_assets() {
   }
 
   wp_enqueue_script('modernizr', Assets\asset_path('scripts/modernizr.js'), array(), null, true);
-  wp_enqueue_script('sage_js', Assets\asset_path('scripts/main.js'), array('jquery'), null, true);
+  wp_enqueue_script('sage_js', Assets\asset_path('scripts/main.js'), array('jquery', 'modernizr'), null, true);
 
   // ajax helper
   wp_localize_script( 'sage_js', 'ajax_helper', array(
@@ -148,24 +112,6 @@ function sage_options_page() {
             'menu_slug'     => 'theme_options',
             'capability'    => 'manage_options',
             'redirect'      => true
-        ));
-
-        acf_add_options_sub_page(array(
-            'page_title'    => __('Header', 'sage'),
-            'menu_title'    => __('Header', 'sage'),
-            'parent_slug'   => 'theme_options',
-        ));
-
-        acf_add_options_sub_page(array(
-            'page_title'    => __('Footer', 'sage'),
-            'menu_title'    => __('Footer', 'sage'),
-            'parent_slug'   => 'theme_options',
-        ));
-
-        acf_add_options_sub_page(array(
-            'page_title'    => __('Editor', 'sage'),
-            'menu_title'    => __('Editor', 'sage'),
-            'parent_slug'   => 'theme_options',
         ));
 
     }

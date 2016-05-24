@@ -38,6 +38,7 @@ $margin : 20px;
   @extend .sr-only-focusable;
 }
 
+.gallery-thumb img,
 .wp-post-image {
      @include img-fluid();
 }

@@ -1,19 +1,8 @@
-<?php
+<?php use Roots\Sage\Utils; ?>
 
-/**
- * Archive template
- */
+<?php Utils\sage_page_header(); ?>
 
-use Roots\Sage\Titles;
-
-?>
-<div class="page-header">
-
-  <h1><?php echo Titles\title(); ?></h1>
-
-</div>
-
-<div class="container page-content">
+<div class="page-content container">
 
   <?php if (have_posts()) : ?>
 

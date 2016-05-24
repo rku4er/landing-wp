@@ -1,55 +1,7 @@
 {
     "key": "group_5676d5c95923c",
-    "title": "Theme Options | Header",
+    "title": "Header",
     "fields": [
-        {
-            "key": "field_56780c1b90bd9",
-            "label": "Logo",
-            "name": "logo",
-            "type": "image",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "array",
-            "preview_size": "full",
-            "library": "uploadedTo",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": ""
-        },
-        {
-            "key": "field_56780d014f367",
-            "label": "Favicon",
-            "name": "favicon",
-            "type": "image",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "url",
-            "preview_size": "full",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": ".ico"
-        },
         {
             "key": "field_56ea8f3f43b2e",
             "label": "Navbar position",
@@ -64,13 +16,12 @@
                 "id": ""
             },
             "choices": {
-                "static-top": "Static top",
-                "fixed-top": "Fixed top",
-                "fixed-bottom": "Fixed bottom"
+                "normal": "Normal",
+                "sticky": "Sticky"
             },
-            "default_value": {
-                "static-top": "static-top"
-            },
+            "default_value": [
+                "normal"
+            ],
             "allow_null": 0,
             "multiple": 0,
             "ui": 0,
@@ -85,11 +36,11 @@
             {
                 "param": "options_page",
                 "operator": "==",
-                "value": "acf-options-header"
+                "value": "theme_options"
             }
         ]
     ],
-    "menu_order": 0,
+    "menu_order": 1,
     "position": "normal",
     "style": "default",
     "label_placement": "left",
@@ -97,5 +48,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1458233958
+    "modified": 1464090572
 }

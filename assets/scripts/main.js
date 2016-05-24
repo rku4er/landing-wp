@@ -18,7 +18,9 @@
     'common': {
       init: function() {
 
-        // Debounced resize
+        /*
+         *_Debounced resize
+         */
         function debounce(func, wait, immediate) {
           var timeout;
           return function() {
@@ -38,8 +40,11 @@
           };
         }
 
-        function custom_inputs(parent) {
 
+        /*
+         *_custom inputs
+         */
+        function custom_inputs(parent) {
           // Material choices
           $(parent).find('.checkbox input[type=checkbox]').after("<span class=checkbox-material><span class=check></span></span>");
           $(parent).find('.radio input[type=radio]').after("<span class=radio-material><span class=circle></span><span class=check></span></span>");
@@ -51,6 +56,8 @@
           $(parent).find('select.gfield_select').addClass('form-control');
         }
 
+
+        // init form custom inputs
         custom_inputs($('.form'));
 
         // apply material inputs on ajax forms
@@ -76,7 +83,7 @@
 
               $navbarEl.css('oveflow', 'hidden');
 
-              if(($(this).offset().left + $dropdownEL.width()) < $navbarEl.width()){
+              if(($(this).offset().left - $navbarEl.offset().left + $dropdownEL.width()) < $navbarEl.width()){
                 $(this).removeClass(options.itemClass);
               } else{
                 $(this).addClass(options.itemClass);
@@ -133,19 +140,23 @@
 
         });
 
+
         // Disable 300ms click delay on mobile
         FastClick.attach(document.body);
 
+
         // Responsive video
         $('.main').fitVids();
+
 
         // Video lightbox
         $('.video-lightbox').magnificPopup({
           type: 'iframe'
         });
 
+
         // Image gallery lightbox
-        $('.gallery-wrapper .gallery').each(function() {
+        $('.gallery').each(function() {
           var $thumb = $(this).find('a.gallery-thumb');
 
           $thumb.each(function() {
@@ -159,44 +170,26 @@
                 tNext: '',
                 tCounter: '%curr% | %total%'
               },
-              image: {
-                verticalFit: true,
-                markup: '<div class="mfp-figure gallery-lightbox">' +
-                          '<div class="mfp-close"></div>' +
-                          '<a class="mfp-pin-it"' +
-                          'href="http://pinterest.com/pin/create/bookmarklet/' +
-                          '?media=' + window.location.protocol +
-                          '//' + window.location.host + $(this).data('media') +
-                          '&url=' + $(this).data('url') +
-                          '&is_video=false' +
-                          '&description=' + $(this).data('description') +
-                          '"><span class="fa fa-pinterest"></span></a>' +
-                          '<div class="mfp-img"></div>' +
-                          '<div class="mfp-bottom-bar">' +
-                            '<div class="mfp-title"></div>' +
-                            '<div class="mfp-counter"></div>' +
-                          '</div>' +
-                        '</div>',
-                titleSrc: function(item) {
-                  return item.el[0].nextSibling.innerHTML;
-                }
-              },
-              mainClass: 'mfp-fade'
+              mainClass: 'mfp-with-zoom',
+              zoom: {
+                enabled: true,
+                duration: 300,
+                easing: 'ease-in-out',
+              }
             });
           });
         });
+
 
         /**
          * ripples
          */
         $([
-          ".navbar-toggle",
-          ".btn:not(.btn-link)",
-          ".card-image",
-          ".navbar a:not(.withoutripple)",
-          ".dropdown-menu a:not(.withoutripple)",
-          ".withripple"
+          ".navbar-toggler",
+          ".navbar-nav a",
+          ".btn"
         ].join(",")).ripples();
+
 
         // Handle hash anchors
         $('.scroll-link').on('click', function(e) {
@@ -209,6 +202,27 @@
               scrollTop: offset
             }, 1000, 'easeInOutCubic');
           }
+        });
+
+
+        // position sticky polifill
+        $('.navbar-sticky').Stickyfill();
+
+
+        // Highlight X letter
+        $('.brand-text').each(function() {
+          var title = $(this).children().first(),
+              text = title.text().replace(/(^\w+\s)(K\.)$/g, '$1<em>$2</em>');
+
+          title.html(text);
+        });
+
+
+        //Login Modal
+        $('#modal-login').on('shown.bs.modal', function (e) {
+          $(e.target).find('input[name="input_3"]').val($(e.relatedTarget).attr('href'));
+          $(e.target).find('input[name="input_4"]').val($(e.relatedTarget).data('sheet'));
+          $(e.target).find('input[name="input_5"]').val($(e.relatedTarget).data('download'));
         });
 
       },

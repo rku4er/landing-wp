@@ -80,35 +80,23 @@ function sage_search_filter($query) {
 add_action( 'login_enqueue_scripts', __NAMESPACE__ . '\\sage_login_logo' );
 
 function sage_login_logo() {
-  $options = sage_get_options();
-  $logo    = $options['logo'];
-?>
-    <style type="text/css">
+
+  if (has_site_icon()) {
+
+    $size = 95;
+    $logo_src = get_site_icon_url($size);
+
+     ?><style type="text/css">
         body.login div#login h1 a {
-          background-image: url(<?php echo $logo['url']; ?>);
+          background-image: url(<?php echo $logo_src; ?>);
           background-size: contain;
         }
         .login h1 a {
-          height: 138px !important;
-          width: 236px !important;
+          height: <?php echo $size; ?>px !important;
+          width: <?php echo $size; ?>px !important;
         }
     </style>
-<?php }
-
-
-/**
- * Set default term on publish
- */
-
-//add_action( 'publish_product', __NAMESPACE__ . '\\sage_set_prop_tax' );
-
-function sage_set_prop_tax($post_ID){
-    $type = 'product_cat';
-    if(!has_term('',$type,$post_ID)){
-        $term = get_term_by('slug', 'uncategorized', $type);
-        wp_set_object_terms($post_ID, $term->term_id, $type);
-    }
-}
+<?php }}
 
 
 /**
@@ -251,26 +239,60 @@ function next_posts_link_attributes() {
 }
 
 
-/**
- * Google fonts
- * @todo make google fonts editable from admin panel via ACF
+/*
+ * Custom site icon size. Used for site logo
  */
 
-add_action( 'wp_head', __NAMESPACE__ . '\\sage_embed_google_fonts', 10, 3 );
+add_filter( 'site_icon_image_sizes', __NAMESPACE__ . '\\prefix_custom_site_icon_size' );
 
-function sage_embed_google_fonts() { ?>
+function prefix_custom_site_icon_size( $sizes ) {
+   $sizes[] = 95;
 
-<script type="text/javascript">
-  WebFontConfig = {
-    google: { families: [ 'Lato:400,300,300italic,400italic,700italic,700:latin', 'Droid+Serif:400,400italic,700,700italic:latin' ] }
-  };
-  (function() {
-    var wf = document.createElement('script');
-    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-    wf.type = 'text/javascript';
-    wf.async = 'true';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wf, s);
-  })(); </script>
+   return $sizes;
+}
 
-<?php }
+
+add_filter( 'site_icon_meta_tags', __NAMESPACE__ . '\\prefix_custom_site_icon_tag' );
+
+function prefix_custom_site_icon_tag( $meta_tags ) {
+   $meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="95x95" />', esc_url( get_site_icon_url( null, 64 ) ) );
+
+   return $meta_tags;
+}
+
+
+/**
+ * Gravity forms
+ */
+add_action('sage/get_contact_form', __NAMESPACE__ . '\\sage_contact_form');
+
+function sage_contact_form() {
+
+  if (!is_page()) return;
+
+  $options = Utils\sage_get_options();
+  $form_id = $options['contact_form'];
+
+  if( $form_id ) {
+    $icon      = sprintf('<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-%1$s"><use xlink:href="#%1$s"></use></svg>', 'email');
+    $text_1    = __('Contact', 'sage');
+    $text_2    = __('Me', 'sage');
+    $form_html = do_shortcode('[gravityform id="' . $form_id . '" title="false" description="false" ajax="true"]');
+
+    echo <<<EOT
+      <div class="contact-form">
+        <div class="inner">
+          <div class="column">
+            <header>
+              <span class="hexagon">{$icon}</span>
+              <h5 class="form-title">{$text_1} <span>{$text_2}</span></h5>
+            </header>
+          </div>
+          <div class="column">
+            {$form_html}
+          </div>
+        </div>
+      </div>
+EOT;
+  }
+}

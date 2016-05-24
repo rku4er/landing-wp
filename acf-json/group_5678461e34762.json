@@ -1,6 +1,6 @@
 {
     "key": "group_5678461e34762",
-    "title": "Theme Options | Editor",
+    "title": "Editor",
     "fields": [
         {
             "key": "field_56784647b13cd",
@@ -77,11 +77,11 @@
             {
                 "param": "options_page",
                 "operator": "==",
-                "value": "acf-options-editor"
+                "value": "theme_options"
             }
         ]
     ],
-    "menu_order": 0,
+    "menu_order": 3,
     "position": "normal",
     "style": "default",
     "label_placement": "left",
@@ -89,5 +89,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1458587210
+    "modified": 1464090579
 }

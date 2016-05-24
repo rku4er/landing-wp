@@ -1,36 +1,416 @@
-// Set wich breakpoints object to use
+/*
+ * Set wich breakpoints object to use
+ */
 $breakpoints: $grid-breakpoints;
+
+/*
+ * Hidden utility
+ */
+.hidden {
+  display: none;
+}
 
  /*
   * Sticky footer
+  *
+  * 1. Avoid the IE 10-11 `min-height` bug.
+  * 2. Set `flex-shrink` to `0` to prevent some browsers from
+  *    letting these items shrink to smaller than their content's default
+  *    minimum size. See http://bit.ly/1Mn35US for details.
+  * 3. Use `%` instead of `vh` since `vh` is buggy in older mobile Safari.
   */
+html,
+body {
+  height: 100%; /* 1, 3 */
+}
 body {
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
 
-  .wrap {
-    flex: 1;
+  .wrap,
+  .navbar,
+  .contact-form,
+  .content-info {
+    flex: none; /* 2 */
+  }
+
+  .wrap,
+  .navbar,
+  .contact-form {
+    flex: 1 0 auto; /* 2 */
   }
 }
 
-/*nice transitions for links*/
-a{
+
+/*
+ * Header margin
+ */
+h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 .5em;
+  text-transform: uppercase;
+}
+
+/*
+ * Link transition
+ */
+a {
     @include transition(color .2s ease-in-out, background .2s ease-in-out);
 }
 
-.btn {
-  position: relative;
+
+/*
+ * More link
+ */
+.more {
+  white-space: nowrap;
 }
 
+/*
+ * Buttons 
+ */
+.btn {
+  position: relative;
+  font-family: $font-family-headings;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.25rem;
+  min-width: 150px;
+}
+
+/*
+ * Icons
+ */
 .icon {
   display: inline-block;
   vertical-align: middle;
-  width: $spacer*2;
-  height: $spacer*2;
+  width: 50px;
+  height: 50px;
 }
 
+
+.hentry {
+  &:not(:last-child) {
+    margin-bottom: $grid-gutter-width;
+  }
+}
+
+
+/*
+ * Wrapper
+ */
+.wrap {
+   background-repeat: repeat-x;
+   background-position: 50% 0;
+}
+
+
+/*
+ * Page header
+ */
+.page-header {
+  @include make-container(0);
+  @include make-container-max-widths();
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  height: 235px;
+  min-width: 50%;
+
+  .title {
+    margin: 0;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate3d(0, -50%, 0);
+    padding-top: $spacer/2;
+    padding-left: 30px;
+    padding-right: 30px;
+    @include gradient-horizontal(darken($brand-primary, 10%), transparent);
+
+    @include media (">=md") {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
+    @include media (">=lg") {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+  }
+}
+
+
+/*
+ * Page content
+ */
+.page-content {
+   background-color: #fafafa;
+   padding: 30px;
+
+   @include media (">=md") {
+     padding: 35px;
+   }
+
+   @include media (">=lg") {
+     padding: 40px;
+   }
+
+   h1, h2, h3, h4, h5, h6, p {
+     &:first-child {
+       margin-top: 0;
+     }
+   }
+}
+
+
+/*
+ * Sub title
+ */
+.sub-title {
+  margin-bottom: $spacer*2;
+  padding: 0 $spacer;
+}
+
+
+/*
+ * Lead
+ */
 .lead {
-    color: $lead-color;
-    font-family: $lead-font-family;
+  color: $gray-light;
+  font-family: $font-family-sans-serif;
+  font-size: $lead-font-size;
+  font-weight: $lead-font-weight;
+  line-height: 1.4;
+
+  p {
+    margin-bottom: $spacer*2;
+  }
+}
+
+
+/*
+ * Contact Form
+ */
+.contact-form {
+  overflow: hidden !important;
+  background-color: $gray;
+  background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 2px, transparent 6px);
+  color: #fff;
+
+  .inner {
+    @include make-container();
+
+    @include media (">=md") {
+      @include make-row(auto);
+      @include make-container-max-widths();
+
+      position: relative;
+      z-index: 1;
+
+      &:before,
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 9999px;
+        z-index: -1;
+      }
+
+      &:before {
+        right: 66.66666%;
+        background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 2px, transparent 6px);
+        background-color: $gray-lighter;
+        height: 100%;
+      }
+
+      &:after {
+        left: 33.33333%;
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+        width: 0;
+        height: 0;
+        border-top: $spacer*1.25 solid transparent;
+        border-left: $spacer*1.25 solid $gray-lighter; 
+        border-bottom: $spacer*1.25 solid transparent;
+      }
+    }
+
+  }
+
+  .column {
+     @include make-col(0);
+
+     @include media ("<md") {
+       margin-left: -$grid-gutter-width/2;
+       margin-right: -$grid-gutter-width/2;
+     }
+
+     @include media (">=md") {
+       @include make-row(0);
+       align-items: center;
+       justify-content: center;
+
+       &:nth-child(1) {
+         @include make-col-span(4);
+       }
+
+       &:nth-child(2) {
+         @include make-col-span(8);
+       }
+     }
+  }
+
+  header {
+    padding: 30px;
+
+    @include media ("<md") {
+      background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 2px, transparent 6px);
+      background-color: $gray-lighter;
+      background-position: 50% 0;
+      @include make-row(0);
+      align-items: center;
+      justify-content: center;
+    }
+
+    @include media (">=md") {
+      @include make-col-span(12);
+    }
+
+    .form-title {
+      text-transform: uppercase;
+      color: #fff;
+      font-size: 30px/$font-size-root*1rem;
+      white-space: nowrap;
+      margin: 2rem 0;
+
+      @include media (">=md") {
+        text-align: center;
+        margin-bottom: 0;
+      }
+
+      span {
+        color: $gray;
+      }
+    }
+  }
+
+  .gform_wrapper,
+  .gforms_confirmation_message {
+    padding: $grid-gutter-width;
+
+    @include media (">=md") {
+      padding-left: $grid-gutter-width;
+      padding-right: $grid-gutter-width;
+    }
+
+  }
+
+  .gforms_confirmation_message {
+    text-align: center;
+  }
+
+  .ginput_container {
+    @include text-inputs() {
+      background-color: $gray-lighter;
+      border-color: $gray-lighter;
+    }
+  }
+
+  .gform_body {
+    @include make-row(0);
+    flex-direction: column;
+    justify-content: center;
+
+    @include media (">=lg") {
+      flex-direction: row;
+    }
+  }
+
+
+  .gform_fields {
+    margin-bottom: $spacer*2;
+    @include clearfix();
+
+    @include media (">=lg") {
+      @include make-col(0);
+    }
+
+    &:nth-child(2n) {
+      @include media (">=lg") {
+        margin-left: $spacer;
+      }
+
+      @include media (">=xl") {
+        margin-left: $spacer*2;
+      }
+
+    }
+  }
+
+  .gfield {
+    width: 300px;
+    max-width: 100%;
+
+    @include media ("<md") {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @include media (">=lg") {
+       width: 260px;
+    }
+
+    @include media (">=xl") {
+       width: 320px;
+    }
+  }
+
+  .gfield_html {
+     display: none;
+  }
+
+  .gform_ajax_spinner {
+    background-color: #FFF;
+    border-radius: 50%;
+    margin-left: $spacer/2;
+  }
+
+  .gform_footer {
+    @include media ("<md") {
+      text-align: center;
+    }
+
+    @include media (">=md") {
+      text-align: right;
+    }
+  }
+
+}
+
+
+/*
+ * Hexagon
+ */
+.hexagon {
+  @include hexagon(100px, 110px, darken($brand-primary, 5%), lighten($brand-primary, 5%));
+
+  @include make-row(auto);
+  align-items: center;
+  justify-content: center;
+
+  @include media ("<md") {
+    margin-right: $spacer;
+  }
+
+  @include media (">=md") {
+    margin: auto;
+  }
+
+  .icon {
+    use {
+      fill: #fff;
+    }
+  }
 }

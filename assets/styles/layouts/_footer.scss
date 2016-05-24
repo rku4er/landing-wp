@@ -1,2 +1,18 @@
 .content-info {
+  background-color: $gray-dark;
+  color: #999;
+  font-size: 14px/$font-size-root*1rem;
+  padding-top: $spacer*2;
+  padding-bottom: $spacer*8;
+
+  .container {
+    border-top: 1px solid $gray-light;
+    padding-top: $spacer;
+    padding-bottom: $spacer;
+  }
+
+  p {
+    margin: 0;
+
+  }
 }
