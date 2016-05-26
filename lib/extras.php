@@ -280,7 +280,7 @@ function sage_contact_form() {
     $form_html = do_shortcode('[gravityform id="' . $form_id . '" title="false" description="false" ajax="true"]');
 
     echo <<<EOT
-      <div class="contact-form">
+      <div id="contact-form" class="contact-form">
         <div class="inner">
           <div class="column">
             <header>
@@ -295,4 +295,51 @@ function sage_contact_form() {
       </div>
 EOT;
   }
+}
+
+
+/**
+ * AJAX Blog posts
+ */
+
+add_action('wp_ajax_nopriv_get_posts', __NAMESPACE__ . '\\sage_get_posts');
+add_action('wp_ajax_get_posts', __NAMESPACE__ . '\\sage_get_posts');
+
+function sage_get_posts(){
+  $output = array();
+  $postcount = wp_count_posts('post');
+  $width = (isset($_POST['width'])) ? $_POST['width'] : '0';
+  $offset = (isset($_POST['offset'])) ? $_POST['offset'] : '0';
+
+  if ($width >= 1200) $numberposts = '3';
+  elseif ($width >= 768) $numberposts = '2';
+  else $numberposts = '1';
+
+  $status = ($numberposts + $offset >= $postcount->publish) ? 'full' : '';
+
+  $args = array(
+      'numberposts' => $numberposts,
+      'offset'      => $offset
+  );
+
+  $field = 'sections';
+  $frontpage_id = get_option('page_on_front');
+  $field_data = Utils\sage_get_field( $field, $frontpage_id );
+
+  if ($field_data) {
+
+    foreach ( $field_data as $field ) {
+
+      if($field['acf_fc_layout'] === 'blog') {
+        $output['content'] = Utils\sage_get_row_content($field, $args);
+        $output['status'] = $status;
+      }
+
+    }
+
+  }
+
+  echo json_encode($output);
+
+  wp_die();
 }

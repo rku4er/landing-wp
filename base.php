@@ -25,7 +25,7 @@
         get_template_part('templates/header');
     ?>
 
-    <div class="wrap" role="document" style="<?php Utils\sage_bind_page_bg(); ?>">
+    <div class="wrap" role="document">
 
       <main class="main" role="main">
           <?php include Wrapper\template_path(); ?>

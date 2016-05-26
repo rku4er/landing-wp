@@ -218,8 +218,67 @@
         });
 
 
+        // Handle hash anchors
+        $('.nav-link').on('click', function(e){
+            var target = $($(this).attr('href'));
+
+            if(target.length){
+                var offset = Math.round(target.offset().top - $('.navbar-fixed-top').outerHeight() - $('.navbar-sticky-top').outerHeight() - $('#wpadminbar').outerHeight());
+                $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
+            }
+
+            e.preventDefault();
+
+        });
+
+
+        // Portfolio carousel
+        $('.portfolio-carousel .jcarousel').jcarousel({
+          animation: {
+            duration: 500,
+            easing:   'ease-out'
+          },
+          transitions: Modernizr.csstransitions ? {
+            transforms:   Modernizr.csstransforms,
+            transforms3d: Modernizr.csstransforms3d,
+            easing:       'ease-out'
+          } : false,
+          wrap: 'circular'
+        }).on('jcarousel:reload jcarousel:create', function () {
+
+          var carousel = $(this),
+          width = carousel.innerWidth();
+
+          if (width >= 722) {
+            width = width / 3;
+          } else if (width >= 528) {
+            width = width / 2;
+          }
+
+          carousel.jcarousel('items').css('width', Math.ceil(width) + 'px');
+
+        });
+
+
+        // carousel controls
+        $('.jcarousel-control-next').jcarouselControl({
+          target: '+=1'
+        });
+
+        $('.jcarousel-control-prev').jcarouselControl({
+          target: '-=1'
+        });
+
+
+        // Video lightbox
+        $('.video-lightbox').magnificPopup({
+          type: 'iframe',
+          mainClass: 'mfp-with-zoom'
+        });
+
+
         // Blog
-        $('.section.blog').each(function(){
+        $('.section-blog').each(function(){
 
             var $list   = $(this).find('.article-list'),
                 $button = $(this).find('button'),
@@ -231,7 +290,7 @@
                 get_posts = function(data) {
                     jQuery.ajax({
                         type: "POST",
-                        url: getposts.ajax_url,
+                        url: ajax_helper.ajax_url,
                         dataType: "json",
                         data: data,
                         success: function(response) {

@@ -14,14 +14,16 @@ use Roots\Sage\Titles;
  * @return void
  */
 
-function sage_excerpt($limit = 35) {
-  $content = explode(' ', get_the_content(), $limit);
+function sage_get_excerpt($id = null, $limit = 35) {
+  if ( isset( $post->ID ) && !$id ) $id = $post->ID;
+
+  $content = explode(' ', get_post_field('post_content', $id), $limit);
 
   if (count($content) >= $limit) {
     array_pop($content);
     $content = sprintf('%s&hellip; <a class="more" href="%s">%s</a>',
       implode(" ",$content),
-      get_permalink(),
+      get_the_permalink($id),
       __('Read More', 'sage')
     );
   } else {
@@ -32,31 +34,7 @@ function sage_excerpt($limit = 35) {
   $content = apply_filters('the_content', $content);
   $content = str_replace(']]>', ']]&gt;', $content);
 
-  echo $content;
-}
-
-
-/**
- * Get the excerpt
- * @param mixed $post_id the post id (int|str, defaults to $post->id)
- * @return mixed
- * @uses get_the_excerpt()
- */
-
-function sage_get_the_excerpt($post_id) {
-    global $post;
-
-    $save_post = $post;
-
-    if ( isset( $post->ID ) && !$post_id )
-        $post = get_post($post->ID);
-    else
-        $post = get_post($post_id);
-
-    $output = get_the_excerpt();
-    $post = $save_post;
-
-    return $output;
+  return $content;
 }
 
 
@@ -239,7 +217,7 @@ EOT;
 
         <li>
             <div class="thumb-wrapper">
-                <a href="{$item['video']}" class="video-lightbox">
+                <a href="{$item['url']}">
                     <img src="{$item['thumb']}" alt="{$item['title']}">
                 </a>
             </div>
@@ -252,7 +230,7 @@ EOT;
 
     $sections[] = <<<EOT
 
-      <div id="{$carouselID}" class="carousel-wrapper">
+      <div id="{$carouselID}" class="portfolio-carousel section-content">
         <div class="jcarousel">
           <ul>{$portfolio}</ul>
         </div>
@@ -317,7 +295,7 @@ EOT;
 
   } elseif ($layout === 'blog') {
 
-    $load_p_mesg = __('Eldre Innlegg', 'sage');
+    $load_p_mesg = __('Load More', 'sage');
 
     if($numberposts) {
 
@@ -329,10 +307,11 @@ EOT;
       ));
 
       if ($posts) {
+
         foreach ($posts as $post) {
           $thumb   = get_the_post_thumbnail($post->ID, 'large');
           $title   = Titles\title($post->ID);
-          $excerpt = Utils\excerpt($post->ID);
+          $excerpt = sage_get_excerpt($post->ID);
 
           $sections[] = <<<EOT
 
@@ -345,6 +324,7 @@ EOT;
           </li>
 EOT;
         }
+
       }
 
     } else {
@@ -368,7 +348,7 @@ EOT;
   }
 
   if ($numberposts) {
-    return $output;
+    return implode('', $sections);
   } else {
 
     $content_style      = $content_color ? sprintf('style="color: %s"', $content_color) : '';
@@ -378,7 +358,7 @@ EOT;
 
     return <<<EOT
       <div id="{$section_id}" class="section-{$layout}" style="{$section_style}">
-        <div class="content-wrapper" {$content_style}>
+        <div class="container" {$content_style}>
           {$section_title_html}
           {$section_content_html}
         </div>
@@ -402,30 +382,31 @@ EOT;
 
 function sage_flexible_content($field_name = 'sections') {
 
-    if (!$field_name) return;
+  if (!$field_name) return;
 
-    $field_data = sage_get_field( $field_name );
+  $field_data = sage_get_field( $field_name );
 
-    // check if the flexible content field exists
-    if( !$field_data ) return sprintf('<div class="hentry">%s</div>', apply_filters('the_content', get_the_content()));
+  // check if the flexible content field exists
+  if( !$field_data ) return sprintf('<div class="page-content container">%s</div>', apply_filters('the_content', get_the_content()));
 
-    // loop through the rows of data
-    $i = 0;
-    while ( have_rows($field_name) ) : $row = the_row();
+  // loop through the rows of data
+  $content = array();
+  $i = 0;
 
-        // setup data to pass
-        $row_data = get_row($row);
+  foreach ( $field_data as $field ) {
 
-        // pass next sibling id
-        $index        = ++$i;
-        $next_sibling = isset($field_data[$index]) ? $field_data[$index] : array();
+    // pass next sibling id
+    $index           = ++$i;
+    $next_sibling = isset($field_data[$index]) ? $field_data[$index] : array('section_id' => 'contact-form');
 
-        $row_data['next_sibling_id'] = array_key_exists('section_id', $next_sibling) ? $next_sibling['section_id'] : '-1';
+    $field['next_sibling_id'] = array_key_exists('section_id', $next_sibling) ? $next_sibling['section_id'] : '-1';
 
-        // collect layout content
-        return sage_get_row_content($row_data);
+    // collect layout content
+    $content[] = sage_get_row_content($field);
 
-    endwhile;
+  }
+
+  return implode('', $content);
 
 }
 
@@ -499,30 +480,8 @@ function sage_section_header($title = null, $post_id = null) {
 
   array_walk($style, function(&$a, $b) { $a = "$b: $a"; });
 
-  $title = $title ? sprintf('<h2 class="title">%s</h2>', $title) : '';
+  return $title ? sprintf('<h2 class="section-title">%s</h2>', $title) : '';
 
-  return sprintf('<div class="section-header" style="%s">%s</div>', implode('; ', $style), $title);
-
-}
-
-
-/**
- *  Apply background
- */
-function sage_bind_page_bg() {
-  $options = sage_get_options();
-  $id = $options['page_background'];
-  $src = wp_get_attachment_image_src($id, 'full');
-
-  if ($src) {
-    $style = array(
-      'background-image'  => 'url('. $src[0] .')'
-    );
-
-    array_walk($style, function(&$a, $b) { $a = "$b: $a"; });
-
-    echo implode('; ', $style);
-  }
 }
 
 

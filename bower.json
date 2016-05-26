@@ -15,7 +15,8 @@
     "include-media": "~1.4.2",
     "tether": "~1.3.2",
     "bootstrap": "v4.0.0-alpha.2",
-    "Stickyfill": "~1.1.4"
+    "Stickyfill": "~1.1.4",
+    "jcarousel": "~0.3.4"
   },
   "overrides": {
     "modernizr": {

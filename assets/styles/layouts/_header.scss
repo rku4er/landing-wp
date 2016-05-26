@@ -22,10 +22,6 @@
       @include make-container-max-widths();
     }
 
-    @include media (">=lg") {
-      @include make-container(80px);
-    }
-
     .panel {
       @include media ("<sm") {
         flex: 0 0 100%;

@@ -3,47 +3,6 @@
     "title": "Theme Options",
     "fields": [
         {
-            "key": "field_5735c4973d783",
-            "label": "Page background",
-            "name": "page_background",
-            "type": "image",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "id",
-            "preview_size": "medium",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": ""
-        },
-        {
-            "key": "field_5737182f410d1",
-            "label": "Contact Form",
-            "name": "contact_form",
-            "type": "gravity_forms_field",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "allow_null": 1,
-            "allow_multiple": 0,
-            "multiple": 0
-        },
-        {
             "key": "field_57471da63525d",
             "label": "Navbar position",
             "name": "navbar_position",
@@ -70,6 +29,23 @@
             "placeholder": "",
             "disabled": 0,
             "readonly": 0
+        },
+        {
+            "key": "field_5737182f410d1",
+            "label": "Contact Form",
+            "name": "contact_form",
+            "type": "gravity_forms_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "allow_null": 1,
+            "allow_multiple": 0,
+            "multiple": 0
         },
         {
             "key": "field_57471dd03525e",
@@ -176,5 +152,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1464278607
+    "modified": 1464286964
 }
