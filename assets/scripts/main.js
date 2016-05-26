@@ -218,11 +218,69 @@
         });
 
 
-        //Login Modal
-        $('#modal-login').on('shown.bs.modal', function (e) {
-          $(e.target).find('input[name="input_3"]').val($(e.relatedTarget).attr('href'));
-          $(e.target).find('input[name="input_4"]').val($(e.relatedTarget).data('sheet'));
-          $(e.target).find('input[name="input_5"]').val($(e.relatedTarget).data('download'));
+        // Blog
+        $('.section.blog').each(function(){
+
+            var $list   = $(this).find('.article-list'),
+                $button = $(this).find('button'),
+                $data   = {
+                    'action' : 'get_posts',
+                    'width'  : $(window).width(),
+                    'offset' : $list.children().length
+                },
+                get_posts = function(data) {
+                    jQuery.ajax({
+                        type: "POST",
+                        url: getposts.ajax_url,
+                        dataType: "json",
+                        data: data,
+                        success: function(response) {
+                            $resp = $(response.content);
+                            $resp.css({
+                                'visibility' : 'hidden',
+                                'opacity'    : '0',
+                                'position'   : 'absolute',
+                                'left'       : 0
+                            });
+                            $list_H = $list.height();
+                            $list.css('height', $list_H);
+                            $list.append($resp);
+                            $height = $resp.height() + $list_H;
+                            $button.removeClass('loading');
+                            $list.animate({'height' : $height}, 600, 'easeInOutQuad', function(){
+                              $resp.each(function(i){
+                                var $target = $(this),
+                                    $timeout = 100*i;
+                                setTimeout(function(){
+                                  $target.css({
+                                    'visibility' : 'visible',
+                                    'opacity'    : '1',
+                                    'position'   : 'static'
+                                  });
+                                }, $timeout);
+                              });
+                            });
+
+                            if(response.status === 'full') {
+                                $button.hide();
+                            }
+
+                        },
+                        error: function(response){
+                            console.log(response);
+                        }
+                    });
+                };
+
+            get_posts($data);
+
+            $button.click(function(){
+                $(this).addClass('loading');
+                $('.article-list').height('auto');
+                $data.offset = $list.children().length;
+                get_posts($data);
+            });
+
         });
 
       },

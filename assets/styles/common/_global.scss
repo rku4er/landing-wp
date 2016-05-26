@@ -34,9 +34,7 @@ body {
     flex: none; /* 2 */
   }
 
-  .wrap,
-  .navbar,
-  .contact-form {
+  .wrap {
     flex: 1 0 auto; /* 2 */
   }
 }
@@ -46,7 +44,7 @@ body {
  * Header margin
  */
 h1, h2, h3, h4, h5, h6 {
-  margin: 1em 0 .5em;
+  margin: 1em 0;
   text-transform: uppercase;
 }
 
@@ -99,20 +97,21 @@ a {
  * Wrapper
  */
 .wrap {
-   background-repeat: repeat-x;
-   background-position: 50% 0;
+   background-position: 50% 50%;
+   background-size: cover;
 }
 
 
 /*
- * Page header
+ * Section header
  */
-.page-header {
+.section-header {
   @include make-container(0);
   @include make-container-max-widths();
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
+  background-color: #FFF;
   position: relative;
   height: 235px;
   min-width: 50%;
@@ -146,7 +145,7 @@ a {
  * Page content
  */
 .page-content {
-   background-color: #fafafa;
+   background-color: #fff;
    padding: 30px;
 
    @include media (">=md") {

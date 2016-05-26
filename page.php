@@ -2,10 +2,8 @@
 
 <?php while (have_posts()) : the_post(); ?>
 
-  <?php Utils\sage_page_header(); ?>
-
   <div class="page-content container">
-    <?php get_template_part('templates/content', 'page'); ?>
+    <?php echo Utils\sage_flexible_content(); ?>
   </div>
 
 <?php endwhile; ?>

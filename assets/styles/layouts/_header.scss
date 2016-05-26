@@ -206,7 +206,7 @@
 
   @include media (">=sm") {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
   }
 
   .brand-img {
@@ -222,6 +222,8 @@
     white-space: nowrap;
     font-family: $font-family-headings;
     font-size: 24px/$font-size-root*1rem;
+    line-height: 1;
+    padding: 0.7rem 0;
 
     @include media ("<sm") {
       display: none;
