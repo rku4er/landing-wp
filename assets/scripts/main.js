@@ -106,24 +106,6 @@
         // wait until users finishes resizing the browser
         var debouncedResize = debounce(function() {
 
-          // fixed navbar offsets
-
-          $('.navbar-fixed-top').each(function() {
-            var $self = $(this),
-                adminbar = $('#wpadminbar');
-
-            if (adminbar.length) {
-              $self.css('margin-top', adminbar.height());
-            }
-
-            $('.wrap').css('margin-top', $self.height());
-          });
-
-          $('.navbar-fixed-bottom').each(function() {
-            var $self = $(this);
-            $('.content-info').css('padding-bottom', $self.height());
-          });
-
           // fire dropdown align plugin
           $('.navbar-nav .nav-item-has-children').dropdownAlign();
 
@@ -191,20 +173,6 @@
         ].join(",")).ripples();
 
 
-        // Handle hash anchors
-        $('.scroll-link').on('click', function(e) {
-          e.preventDefault();
-          var target = $($(this).attr('href'));
-
-          if (target.length) {
-            var offset = Math.round(target.offset().top - $('.navbar-fixed-top').outerHeight() - $('#wpadminbar').outerHeight());
-            $('html,body').animate({
-              scrollTop: offset
-            }, 1000, 'easeInOutCubic');
-          }
-        });
-
-
         // position sticky polifill
         $('.navbar-sticky').Stickyfill();
 
@@ -223,7 +191,7 @@
             var target = $($(this).attr('href'));
 
             if(target.length){
-                var offset = Math.round(target.offset().top - $('.navbar-fixed-top').outerHeight() - $('.navbar-sticky-top').outerHeight() - $('#wpadminbar').outerHeight());
+                var offset = Math.round(target.offset().top - $('.navbar-sticky').outerHeight() - $('.navbar-sticky-top').outerHeight() - $('#wpadminbar').outerHeight());
                 $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
             }
 
@@ -280,9 +248,10 @@
         // Blog
         $('.section-blog').each(function(){
 
-            var $list   = $(this).find('.article-list'),
-                $button = $(this).find('button'),
-                $data   = {
+            var $list     = $(this).find('.article-list'),
+                $button   = $(this).find('button'),
+                $iterator = 0,
+                $data     = {
                     'action' : 'get_posts',
                     'width'  : $(window).width(),
                     'offset' : $list.children().length
@@ -294,34 +263,52 @@
                         dataType: "json",
                         data: data,
                         success: function(response) {
-                            $resp = $(response.content);
+                            var $resp   = $(response.content);
+
+                            $iterator++;
+
                             $resp.css({
-                                'visibility' : 'hidden',
-                                'opacity'    : '0',
-                                'position'   : 'absolute',
-                                'left'       : 0
+                              'position'   : 'absolute',
+                              'left'       : '0',
+                              'width'      : '100%',
+                              'visibility' : 'hidden',
+                              'opacity'    : '0'
                             });
-                            $list_H = $list.height();
-                            $list.css('height', $list_H);
+
+                            $list.css({
+                              'position'   : 'relative'
+                            });
+
                             $list.append($resp);
-                            $height = $resp.height() + $list_H;
+
+                            var $list_H = $list.height(),
+                                $height = $resp.height() + $list_H;
+
+                            $list.css('height', $list_H);
+
                             $button.removeClass('loading');
-                            $list.animate({'height' : $height}, 600, 'easeInOutQuad', function(){
-                              $resp.each(function(i){
-                                var $target = $(this),
-                                    $timeout = 100*i;
-                                setTimeout(function(){
+
+                            $list.animate({
+                              'height': $height
+                            }, 600, 'easeInOutQuad', function() {
+                              $resp.each(function(i) {
+                                var $target  = $(this),
+                                    $timeout = 100 * i;
+
+                                setTimeout(function() {
                                   $target.css({
+                                    'position'   : 'static',
                                     'visibility' : 'visible',
-                                    'opacity'    : '1',
-                                    'position'   : 'static'
+                                    'opacity'    : '1'
                                   });
+
+                                  $list.css({'height' : 'auto'});
                                 }, $timeout);
                               });
                             });
 
-                            if(response.status === 'full') {
-                                $button.hide();
+                            if (response.status === 'full') {
+                              $button.hide();
                             }
 
                         },
@@ -334,13 +321,28 @@
             get_posts($data);
 
             $button.click(function(){
-                $(this).addClass('loading');
-                $('.article-list').height('auto');
-                $data.offset = $list.children().length;
-                get_posts($data);
+              $(this).addClass('loading');
+
+              var $postop = Math.round($list.offset().top -
+                  $(window).height()*0.2 -
+                  $('.navbar-sticky').outerHeight() -
+                  $('#wpadminbar').outerHeight() +
+                  $iterator*$list.find('li:first').outerHeight());
+
+              $('html,body').animate({
+                scrollTop: $postop
+              }, 600, 'easeInOutQuad');
+
+              $list.height('auto');
+
+              $data.offset = $list.children().length;
+
+              get_posts($data);
+
             });
 
         });
+
 
       },
       finalize: function() {

@@ -8,6 +8,23 @@ $icon-play: svg-inline('<svg x="0" y="0" viewBox="0 0 163.861 163.861"><style>pa
  */
 $breakpoints: $grid-breakpoints;
 
+
+/*
+ * Viewport fix for IE Win8 metro
+ */
+@-ms-viewport {
+    width: device-width;
+}
+
+
+/*
+ * Viewport fix for Windows phone
+ */
+@viewport {
+    width: device-width;
+}
+
+
 /*
  * Hidden utility
  */
@@ -46,12 +63,26 @@ body {
 
 
 /*
+ * Flexible grid 
+ */
+[class*="col-"] {
+  min-height: 1px;
+  padding-left: $grid-gutter-width/2;
+  padding-right: $grid-gutter-width/2;
+  position: relative;
+  flex: 1 1 0;
+}
+
+
+
+/*
  * Header margin
  */
 h1, h2, h3, h4, h5, h6 {
   margin: 1em 0;
   text-transform: uppercase;
 }
+
 
 /*
  * Link transition
@@ -91,6 +122,9 @@ a {
 }
 
 
+/*
+ * Post entry tweak
+ */
 .hentry {
   &:not(:last-child) {
     margin-bottom: $grid-gutter-width;
@@ -99,22 +133,51 @@ a {
 
 
 /*
- * Wrapper
+ * Content space
  */
-.wrap {
-   background-position: 50% 50%;
-   background-size: cover;
-   background-attachment: fixed;
+.page-content {
+  padding-top: $grid-gutter-width;
+  padding-bottom: $grid-gutter-width;
 }
 
 
 /*
- * Content space
+ * Sections
  */
-.page-content,
-.section-content{
-  padding-top: $grid-gutter-width;
-  padding-bottom: $grid-gutter-width;
+.section {
+   position: relative;
+   padding-top: $grid-gutter-width*2;
+   padding-bottom: $grid-gutter-width*3;
+
+   .scroll-btn {
+     width: 73px;
+     height: 73px;
+     @include border-radius(50%);
+     @include box-shadow(0 4px 0 rgba(0,0,0,.05));
+     display: flex;
+     align-items: center;
+     justify-content: center;
+
+     position: absolute;
+     top: 100%;
+     left: 50%;
+     z-index: 1;
+
+     transform: translate3d(-50%,-70%,0);
+
+     .icon {
+       opacity: .5;
+     }
+   }
+}
+
+
+/*
+ * Section wrapper
+ */
+.section-wrapper {
+  @include make-container(0);
+  @include make-container-max-widths();
 }
 
 
@@ -122,7 +185,7 @@ a {
  * Section title
  */
 .section-title {
-  margin: 0;
+  margin: 0 0 2rem;
   color: #fff;
   padding: $spacer/2 $grid-gutter-width;
   @include gradient-horizontal(darken($brand-primary, 10%), transparent);
@@ -134,6 +197,8 @@ a {
  */
 .section-content {
   @include clearfix();
+  padding: $grid-gutter-width $grid-gutter-width/2;
+  background-color: #fff;
 }
 
 
@@ -245,13 +310,7 @@ a {
 
   .gform_wrapper,
   .gforms_confirmation_message {
-    padding: $grid-gutter-width;
-
-    @include media (">=md") {
-      padding-left: $grid-gutter-width;
-      padding-right: $grid-gutter-width;
-    }
-
+    padding: $grid-gutter-width*2 $grid-gutter-width;
   }
 
   .gforms_confirmation_message {
@@ -364,41 +423,10 @@ a {
 
 
 /*
- * Sections
- */
-[class*="section-"] {
-   position: relative;
-
-   .scroll-btn {
-     width: 73px;
-     height: 73px;
-     @include border-radius(50%);
-     @include box-shadow(0 4px 0 rgba(0,0,0,.05));
-     display: flex;
-     align-items: center;
-     justify-content: center;
-
-     position: absolute;
-     top: 100%;
-     left: 50%;
-     z-index: 1;
-
-     transform: translate3d(-50%,-70%,0);
-
-     .icon {
-       opacity: .5;
-     }
-   }
-}
-
-
-/*
  * Portfolio
  */
 .portfolio-carousel {
     position: relative;
-    margin-left: -$grid-gutter-width/2;
-    margin-right: -$grid-gutter-width/2;
 
     @include media (">=sm") {
         padding-left: $grid-gutter-width*2;
@@ -540,9 +568,11 @@ a {
 
 
 .section-blog {
+
     .article-list {
         @include list-unstyled();
-        @include make-row();
+        @include make-row(0);
+        margin: 0;
         align-content: flex-start;
         position: relative;
 
@@ -571,7 +601,6 @@ a {
       padding-bottom: 60%;
       height: 0;
       margin-bottom: $spacer*1.5;
-      border: 1px solid $gray-light;
     }
 
     .wp-post-image {
@@ -596,6 +625,75 @@ a {
         .more {
             font-weight: 700;
             white-space: nowrap;
+        }
+    }
+
+    .load-p-control {
+        text-align: center;
+
+        button {
+            background-color: transparent;
+            border: 0 none;
+            text-transform: uppercase;
+            color: $gray;
+            font-size: $font-size-base*1.1875;
+            position: relative;
+            @include transition(color .2s ease-out);
+
+            @include hover-focus {
+                 color: $brand-primary;
+            }
+
+            &.loading {
+                .spinner {
+                    display: block;
+                }
+            }
+
+            .spinner {
+              margin: 0 auto;
+              position: absolute;
+              left: 0;
+              right: 0;
+              bottom: 100%;
+              display: none;
+            }
+
+            .spinner > div {
+              width: $spacer;
+              height: $spacer;
+              background-color: $brand-primary;
+              overflow: hidden;
+
+              display: inline-block;
+              -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+              animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            }
+
+            .spinner .bounce1 {
+              -webkit-animation-delay: -0.32s;
+              animation-delay: -0.32s;
+            }
+
+            .spinner .bounce2 {
+              -webkit-animation-delay: -0.16s;
+              animation-delay: -0.16s;
+            }
+
+            @-webkit-keyframes sk-bouncedelay {
+              0%, 80%, 100% { -webkit-transform: scale(0) }
+              40% { -webkit-transform: scale(1.0) }
+            }
+
+            @keyframes sk-bouncedelay {
+              0%, 80%, 100% { 
+                -webkit-transform: scale(0);
+                transform: scale(0);
+              } 40% { 
+                -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+              }
+            }
         }
     }
 }

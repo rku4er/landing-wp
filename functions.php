@@ -10,14 +10,15 @@
  * @link https://github.com/roots/sage/pull/1042
  */
 $sage_includes = array(
-  'lib/utils.php',                 // Utility functions
-  'lib/setup.php',                 // Initial setup and constants
-  'lib/assets.php',                // Scripts and stylesheets
-  'lib/extras.php',                // Extra functions
-  'lib/gallery.php',               // Custom [gallery]
-  'lib/titles.php',                // Page titles
-  'lib/wrapper.php',               // Theme wrapper class
-  'lib/soil/soil.php',             // Soil Modules
+  'lib/utils.php',
+  'lib/setup.php',
+  'lib/assets.php',
+  'lib/extras.php',
+  'lib/gallery.php',
+  'lib/shortcodes.php',
+  'lib/titles.php',
+  'lib/wrapper.php',
+  'lib/soil/soil.php'
 );
 
 foreach ($sage_includes as $file) {

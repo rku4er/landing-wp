@@ -357,8 +357,8 @@ EOT;
     $down_icon_color    = sage_complementary_color($bg_color);
 
     return <<<EOT
-      <div id="{$section_id}" class="section-{$layout}" style="{$section_style}">
-        <div class="container" {$content_style}>
+      <div id="{$section_id}" class="section section-{$layout}" style="{$section_style}">
+        <div class="section-wrapper" {$content_style}>
           {$section_title_html}
           {$section_content_html}
         </div>
@@ -474,13 +474,9 @@ function sage_section_header($title = null, $post_id = null) {
 
   if (isset($post->ID) && !$post_id) $post_id = $post->ID;
 
-  $thumb_id = get_post_thumbnail_id( $post_id );
-  $src      = wp_get_attachment_image_src($thumb_id, 'full');
-  $style    = !empty($src) ? array( 'background-image'  => 'url('. $src[0] .')') : array();
+  $title = $title ? $title : Titles\title($post_id);
 
-  array_walk($style, function(&$a, $b) { $a = "$b: $a"; });
-
-  return $title ? sprintf('<h2 class="section-title">%s</h2>', $title) : '';
+  return sprintf('<h2 class="section-title">%s</h2>', $title);
 
 }
 
