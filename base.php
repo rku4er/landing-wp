@@ -20,7 +20,7 @@
 
     <?php get_template_part('templates/icons-svg'); ?>
 
-    <div class="wrap" role="document">
+    <div class="wrap" role="document" style="<?php echo Utils\sage_apply_page_bg(); ?>">
 
       <?php
           do_action('get_header');

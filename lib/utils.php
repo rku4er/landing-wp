@@ -295,7 +295,6 @@ EOT;
 
   } elseif ($layout === 'blog') {
 
-    $load_p_mesg = __('Load More', 'sage');
 
     if($numberposts) {
 
@@ -329,19 +328,23 @@ EOT;
 
     } else {
 
+      $load_p_mesg = __('Load More', 'sage');
+
       $sections[] = <<<EOT
 
-      <ul class="article-list"></ul>
-      <p class="load-p-control">
-        <button type="button">
-          <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-          </div>
-          {$load_p_mesg}
-        </button>
-      </p>
+      <div class="section-content">
+        <ul class="article-list"></ul>
+        <p class="load-p-control">
+          <button type="button">
+            <span class="spinner">
+              <span class="bounce1"></span>
+              <span class="bounce2"></span>
+              <span class="bounce3"></span>
+            </span>
+            {$load_p_mesg}
+          </button>
+        </p>
+      </div>
 EOT;
     }
 
@@ -351,10 +354,26 @@ EOT;
     return implode('', $sections);
   } else {
 
-    $content_style      = $content_color ? sprintf('style="color: %s"', $content_color) : '';
-    $section_title_html = $section_title ? sage_section_header($section_title) : '';
+    $content_style        = $content_color ? sprintf('style="color: %s"', $content_color) : '';
+    $section_title_html   = $section_title ? sage_section_header($section_title) : '';
     $section_content_html = implode('', $sections);
-    $down_icon_color    = sage_complementary_color($bg_color);
+    $down_link_style      = array();
+    $down_icon_style      = array();
+
+    if($bg_color) {
+      $down_icon_style['fill'] = sage_complementary_color($bg_color);
+      $down_link_style['color'] = sage_complementary_color($bg_color);
+      $down_link_style['background-color'] = $bg_color;
+    } else {
+      $down_icon_style['fill'] = '#464646';
+      $down_link_style['color'] = '#464646';
+      $down_link_style['background-color'] = '#ffffff';
+    }
+
+    array_walk($down_link_style, function(&$a, $b) { $a = "$b: $a"; });
+    array_walk($down_icon_style, function(&$a, $b) { $a = "$b: $a"; });
+    $down_link_style = implode('; ', $down_link_style);
+    $down_icon_style = implode('; ', $down_icon_style);
 
     return <<<EOT
       <div id="{$section_id}" class="section section-{$layout}" style="{$section_style}">
@@ -362,8 +381,8 @@ EOT;
           {$section_title_html}
           {$section_content_html}
         </div>
-        <a href="#{$scroll_target}" class="nav-link scroll-btn" style="color: {$down_icon_color}; background-color: {$bg_color}">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" style="fill: {$down_icon_color}"><use xlink:href="#down"></use></svg>
+        <a href="#{$scroll_target}" class="nav-link scroll-btn" style="{$down_link_style}">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" style="{$down_icon_style}"><use xlink:href="#down"></use></svg>
         </a>
       </div>
 EOT;
@@ -604,4 +623,32 @@ function sage_complementary_color($hex) {
 
   return $output;
 
+}
+
+
+/*
+ * Page background
+ */
+function sage_apply_page_bg() {
+  $options       = sage_get_options();
+  $bg_color      = $options['page_bg_color'];
+  $bg_image      = wp_get_attachment_url($options['page_bg_image']);
+  $bg_size       = $options['page_bg_size'];
+  $bg_repeat     = $options['page_bg_repeat'];
+  $bg_position   = $options['page_bg_position_x'] .' '. $options['page_bg_position_y'];
+  $bg_attachment = $options['page_bg_attachment'];
+  $style         = array();
+
+  if ($bg_color) $style['background-color'] = $bg_color;
+  if ($bg_image) {
+    $style['background-image'] = sprintf('url(%s)', $bg_image);
+    if ($bg_size) $style['background-size'] = $bg_size;
+    if ($bg_repeat) $style['background-repeat'] = $bg_repeat;
+    if ($bg_position) $style['background-position'] = $bg_position;
+    if ($bg_attachment) $style['background-attachment'] = $bg_attachment;
+  }
+
+  array_walk($style, function(&$a, $b) { $a = "$b: $a"; });
+
+  return implode('; ', $style);
 }
