@@ -168,7 +168,7 @@
          */
         $([
           ".navbar-toggler",
-          ".navbar-nav a",
+          ".nav-link",
           ".btn"
         ].join(",")).ripples();
 

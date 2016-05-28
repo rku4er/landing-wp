@@ -1,8 +1,7 @@
 <?php use Roots\Sage\Utils; ?>
 
-<?php Utils\sage_page_header(); ?>
-
 <div class="page-content container">
+  <?php echo Utils\sage_get_heading('h1'); ?>
 
   <?php if (have_posts()) : ?>
 

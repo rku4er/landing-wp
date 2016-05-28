@@ -235,10 +235,10 @@ EOT;
           <ul>{$portfolio}</ul>
         </div>
         <button type="button" class="jcarousel-control-prev">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#prev"></use></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#prev-thin"></use></svg>
         </button>
         <button type="button" class="jcarousel-control-next">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#next"></use></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#next-thin"></use></svg>
         </button>
       </div>
 EOT;
@@ -355,7 +355,7 @@ EOT;
   } else {
 
     $content_style        = $content_color ? sprintf('style="color: %s"', $content_color) : '';
-    $section_title_html   = $section_title ? sage_section_header($section_title) : '';
+    $section_title_html   = $section_title ? sage_get_heading('h2', $section_title) : '';
     $section_content_html = implode('', $sections);
     $down_link_style      = array();
     $down_icon_style      = array();
@@ -382,7 +382,7 @@ EOT;
           {$section_content_html}
         </div>
         <a href="#{$scroll_target}" class="nav-link scroll-btn" style="{$down_link_style}">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" style="{$down_icon_style}"><use xlink:href="#down"></use></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" style="{$down_icon_style}"><use xlink:href="#down-thin"></use></svg>
         </a>
       </div>
 EOT;
@@ -487,15 +487,11 @@ function sage_info() {
  *  Section header
  */
 
-function sage_section_header($title = null, $post_id = null) {
+function sage_get_heading($tag = 'h1', $title = null) {
 
-  global $post;
+  $title = $title ? $title : Titles\title();
 
-  if (isset($post->ID) && !$post_id) $post_id = $post->ID;
-
-  $title = $title ? $title : Titles\title($post_id);
-
-  return sprintf('<h2 class="section-title">%s</h2>', $title);
+  return sprintf('<%1$s class="section-title">%2$s</%1$s>', $tag, $title);
 
 }
 

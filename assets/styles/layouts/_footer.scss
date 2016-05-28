@@ -1,12 +1,12 @@
 .content-info {
   background-color: $gray-dark;
-  text-align: center;
-  color: #999;
-  font-size: 14px/$font-size-root*1rem;
 
   .container {
     padding-top: $spacer*2;
     padding-bottom: $spacer*2;
+    text-align: center;
+    color: #999;
+    font-size: 14px/$font-size-root*1rem;
   }
 
   p {

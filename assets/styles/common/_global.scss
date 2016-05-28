@@ -25,13 +25,6 @@ $breakpoints: $grid-breakpoints;
 }
 
 
-/*
- * Hidden utility
- */
-.hidden {
-  display: none;
-}
-
  /*
   * Sticky footer
   *
@@ -60,6 +53,21 @@ body {
     flex: 1 0 auto; /* 2 */
   }
 }
+
+
+
+/*
+ * Hidden utility
+ */
+.hidden {
+  display: none;
+}
+
+
+label {
+   display: inline;
+}
+
 
 
 /*
@@ -123,11 +131,26 @@ a {
 
 
 /*
- * Post entry tweak
+ * Search
  */
-.hentry {
-  &:not(:last-child) {
-    margin-bottom: $grid-gutter-width;
+.search,
+.archive {
+  .hentry {
+    &:not(:last-child) {
+      margin-bottom: $grid-gutter-width;
+    }
+
+    padding-left: 180px;
+
+    img {
+       float: left;
+       margin-left: -180px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
   }
 }
 
@@ -384,13 +407,7 @@ a {
   }
 
   .gform_footer {
-    @include media ("<md") {
-      text-align: center;
-    }
-
-    @include media (">=md") {
-      text-align: right;
-    }
+    text-align: center;
   }
 
 }
@@ -439,8 +456,6 @@ a {
     }
 
     .icon {
-        width: $grid-gutter-width*2;
-        height: $grid-gutter-width*2;
         fill: darken($gray-light, 2%);
     }
 
@@ -474,11 +489,11 @@ a {
     }
 
     .jcarousel-control-prev {
-        left: 0;
+        left: $spacer;
     }
 
     .jcarousel-control-next {
-        right: 0;
+        right: $spacer;
     }
 
     .thumb-wrapper {
@@ -633,17 +648,9 @@ a {
         text-align: center;
 
         button {
-            background-color: transparent;
-            border: 0 none;
-            text-transform: uppercase;
-            color: $gray;
-            font-size: $font-size-base*1.1875;
-            position: relative;
+            @extend .btn;
+            @extend .btn-primary-outline;
             @include transition(color .2s ease-out);
-
-            @include hover-focus {
-                 color: $brand-primary;
-            }
 
             &.loading {
                 .spinner {
@@ -660,7 +667,7 @@ a {
               display: none;
             }
 
-            .spinner > div {
+            .spinner > span {
               width: $spacer;
               height: $spacer;
               background-color: $brand-primary;
@@ -681,20 +688,21 @@ a {
               animation-delay: -0.16s;
             }
 
-            @-webkit-keyframes sk-bouncedelay {
-              0%, 80%, 100% { -webkit-transform: scale(0) }
-              40% { -webkit-transform: scale(1.0) }
-            }
-
-            @keyframes sk-bouncedelay {
-              0%, 80%, 100% { 
-                -webkit-transform: scale(0);
-                transform: scale(0);
-              } 40% { 
-                -webkit-transform: scale(1.0);
-                transform: scale(1.0);
-              }
-            }
         }
     }
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
 }
