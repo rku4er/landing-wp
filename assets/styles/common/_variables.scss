@@ -45,7 +45,7 @@ $brand-danger:              #d9534f;
 
 $enable-flex:               true;
 $enable-rounded:            true;
-$enable-shadows:            false;
+$enable-shadows:            true;
 $enable-gradients:          true;
 $enable-transitions:        true;
 $enable-hover-media-query:  false;
@@ -144,7 +144,7 @@ $grid-gutter-width:          1.875rem; // 30px
 
 $font-family-sans-serif:     "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-family-serif:          Georgia, "Times New Roman", Times, serif;
-$font-family-headings:       "Teko", sans-serif;
+$font-family-headings:       "Poiret One", sans-serif;
 $font-family-monospace:      Menlo, Monaco, Consolas, "Courier New", monospace;
 $font-family-base:           $font-family-sans-serif;
 
@@ -176,7 +176,7 @@ $display4-weight:             300;
 $line-height:                1.6;
 
 $headings-font-family:       $font-family-headings;
-$headings-font-weight:       700;
+$headings-font-weight:       400;
 $headings-line-height:       1.1;
 $headings-color:             $body-color;
 
@@ -365,8 +365,8 @@ $zindex-modal:             1050;
 // Navbar
 
 $navbar-border-radius:              $border-radius;
-$navbar-padding-horizontal:         $spacer;
-$navbar-padding-vertical:           ($spacer / 2);
+$navbar-padding-horizontal:         0;
+$navbar-padding-vertical:           0;
 
 $navbar-dark-color:                 rgba(255,255,255,.5);
 $navbar-dark-hover-color:           rgba(255,255,255,.75);

@@ -3,6 +3,22 @@
     "title": "Theme Options",
     "fields": [
         {
+            "key": "field_574c3a11b678f",
+            "label": "General",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
             "key": "field_57471da63525d",
             "label": "Navbar position",
             "name": "navbar_position",
@@ -29,6 +45,78 @@
             "placeholder": "",
             "disabled": 0,
             "readonly": 0
+        },
+        {
+            "key": "field_5737182f410d1",
+            "label": "Contact Form",
+            "name": "contact_form",
+            "type": "gravity_forms_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "allow_null": 1,
+            "allow_multiple": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_57471dd03525e",
+            "label": "Content info",
+            "name": "content_info",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1
+        },
+        {
+            "key": "field_57471ded3525f",
+            "label": "Google Analytics ID",
+            "name": "google_analytics_id",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_574c3a1db6790",
+            "label": "Background",
+            "name": "_copy",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
         },
         {
             "key": "field_57486b9506fc2",
@@ -218,10 +306,10 @@
             "readonly": 0
         },
         {
-            "key": "field_5737182f410d1",
-            "label": "Contact Form",
-            "name": "contact_form",
-            "type": "gravity_forms_field",
+            "key": "field_574c3a36b6791",
+            "label": "Editor",
+            "name": "_copy",
+            "type": "tab",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -230,48 +318,8 @@
                 "class": "",
                 "id": ""
             },
-            "allow_null": 1,
-            "allow_multiple": 0,
-            "multiple": 0
-        },
-        {
-            "key": "field_57471dd03525e",
-            "label": "Content info",
-            "name": "content_info",
-            "type": "wysiwyg",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "tabs": "all",
-            "toolbar": "full",
-            "media_upload": 1
-        },
-        {
-            "key": "field_57471ded3525f",
-            "label": "Google Analytics ID",
-            "name": "google_analytics_id",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
-            "maxlength": "",
-            "readonly": 0,
-            "disabled": 0
+            "placement": "top",
+            "endpoint": 0
         },
         {
             "key": "field_57471df835260",
@@ -339,5 +387,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1464365833
+    "modified": 1464613458
 }

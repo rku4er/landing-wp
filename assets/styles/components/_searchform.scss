@@ -1,0 +1,62 @@
+.search-form {
+  @include media ("<sm") {
+    padding: $spacer $spacer*1.5;
+  }
+
+  @include media (">=sm") {
+    margin: $spacer 0;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  label {
+    margin-bottom: 0;
+
+    @include media ("<sm") {
+       display: none;
+    }
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      use {
+        fill: $brand-primary;
+      }
+    }
+  }
+
+  .search-field {
+    border: 1px solid #fff;
+    min-width: 0;
+    @include transition(border .2s ease-out);
+    @include placeholder() {
+      color: $gray;
+      text-transform: uppercase;
+    }
+
+    @include media (">=sm") {
+      border-width: 1px 1px 3px;
+      border-bottom-color: $gray-lightest;
+
+      &:first-child {
+        @include border-right-radius($border-radius);
+      }
+    }
+
+    &:focus {
+      border-bottom-color: $brand-primary;
+    }
+  }
+
+  .input-group-btn {
+     margin-left: $spacer/2;
+  }
+
+  .search-submit {
+    @include media (">=sm") {
+      display: none;
+    }
+  }
+}

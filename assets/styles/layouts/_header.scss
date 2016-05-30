@@ -1,10 +1,8 @@
 .navbar{
-  z-index: $zindex-navbar;
   background-color: #fff;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-bottom: 0;
+  margin: 0;
   @include transition(height .2s ease-out);
+  @include box-shadow(0 5px 5px rgba(0,0,0,.2));
 
   &.navbar-sticky {
     @include clearfix();
@@ -12,85 +10,36 @@
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+    z-index: $zindex-navbar;
   }
 
-  .navbar-tabs {
-    @include make-row();
+  .navbar-container {
+    @include make-container(0);
+    @include make-container-max-widths();
 
-    @include media (">=sm") {
-      @include make-container(0);
-      @include make-container-max-widths();
+    @include media (">=md") {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .controls {
+    @include media ("<=md") {
+      @include make-row(0);
+      justify-content: space-between;
     }
 
-    .panel {
-      @include media ("<sm") {
-        flex: 0 0 100%;
-        max-width: 100%;
-        background-color: $gray-lightest;
-      }
+    @include media (">=sm", "<md") {
+      justify-content: center;
     }
-
   }
 
   .collapse {
-     @include media (">=sm") {
-       display: flex !important;
-       height: auto !important;
-     }
-  }
-
-  .navbar-brand-wrapper,
-  .navbar-search-wrapper,
-  .navbar-nav-wrapper {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-  .navbar-brand-wrapper {
-    margin-bottom: 0;
-    display: flex;
-    flex-wrap: wrap;
-    height: 100%;
-    justify-content: center;
-
-    @include media ("<sm") {
-       border-bottom: 1px solid #ccc;
-    }
-
-    @include media (">=md") {
-      flex: 0 0 60%;
-      max-width: 60%;
-      justify-content: flex-start;
-    }
-
-    @include media (">=lg") {
-      justify-content: flex-start;
-    }
-  }
-
-  .navbar-brand {
-    margin-top: $spacer;
-    margin-bottom: $spacer;
-  }
-
-  .navbar-search-wrapper {
-
     @include media (">=sm") {
-       display: flex;
-       justify-content: center;
-       align-items: center;
-    }
-
-    @include media (">=md") {
-      flex: 0 0 40%;
-      max-width: 40%;
-      justify-content: flex-end;
-    }
-  }
-
-  .navbar-nav-wrapper {
-    @include media (">=sm") {
-      border-top: 1px solid #ccc;
+      display: block !important;
+      height: auto !important;
     }
   }
 
@@ -102,6 +51,7 @@
   overflow: hidden;
   position: relative;
   vertical-align: top;
+  border-radius: 0;
 
   @include media (">=sm") {
     display: none;
@@ -114,14 +64,6 @@
       width: $spacer*2;
       height: $spacer*1.5;
       overflow: hidden;
-  }
-
-  .icon-search {
-    transform: translate3d(0, 30px, 0);
-    @include toggle-off();
-    use {
-      fill: $brand-primary;
-    }
   }
 
   .icon-menu {
@@ -178,7 +120,6 @@
 
   &.collapsed {
 
-    .icon-search,
     .icon-menu {
       transform: translate3d(0, 0, 0);
       @include toggle-on();
@@ -191,27 +132,16 @@
 }
 
 .navbar-brand {
-  margin-right: 0;
-  max-height: 100%;
   float: none;
   display: inline-block;
-
-  @include media ("<sm") {
-    justify-content: center;
-  }
-
-  @include media (">=sm") {
-    display: flex;
-    align-items: flex-end;
-  }
+  margin-right: 0;
+  padding: $spacer/2;
+  display: flex;
+  align-items: center;
 
   .brand-img {
-      max-height: 95px;
-
-      @include media (">=sm") {
-        margin-left: $spacer;
-        margin-right: $grid-gutter-width/2;
-      }
+    height: 60px;
+    margin-right: $grid-gutter-width/2;
   }
 
   .brand-text {
@@ -219,15 +149,6 @@
     font-family: $font-family-headings;
     font-size: 24px/$font-size-root*1rem;
     line-height: 1;
-    padding: 0.7rem 0;
-
-    @include media ("<sm") {
-      display: none;
-    }
-
-    @include media (">=sm") {
-      margin-right: $spacer;
-    }
 
     h1, p {
       margin: 0;
@@ -235,7 +156,7 @@
 
     h1, strong {
       font-size: 24px/$font-size-root*1rem;
-      font-weight: bold;
+      font-weight: 400;
       line-height: 1;
       color: $gray-dark;
     }
@@ -257,75 +178,13 @@
 }
 
 
-.search-form {
-  display: flex;
-  align-items: center;
-
-  @include media ("<sm") {
-    padding: $spacer $spacer*1.5;
-  }
-
-  @include media (">=sm") {
-    margin: $spacer 0;
-  }
-
-  label {
-    margin-bottom: 0;
-
-    @include media ("<sm") {
-       display: none;
-    }
-
-    .icon {
-      width: 1.5rem;
-      height: 1.5rem;
-      use {
-        fill: $brand-primary;
-      }
-    }
-  }
-
-  .search-field {
-    border: 1px solid #fff;
-    max-width: 100%;
-    min-width: 165px;
-    @include transition(border .2s ease-out);
-    @include placeholder() {
-      color: $gray;
-      text-transform: uppercase;
-    }
-
-    @include media (">=sm") {
-      border-width: 1px 1px 3px;
-      border-bottom-color: $gray-lightest;
-    }
-
-    &:focus {
-      border-bottom-color: $brand-primary;
-    }
-  }
-
-  .input-group-btn {
-     margin-left: $spacer/2;
-  }
-
-  .search-submit {
-    @include media (">=sm") {
-      display: none;
-    }
-  }
-}
-
 .navbar-nav {
-  flex: 1;
-
-  @include media (">=sm", "<md") {
+  @include media ("<md") {
     text-align: center;
   }
 
   .nav-item {
     position: relative;
-    margin-left: 0;
     float: none;
 
     &:not(:first-child) {
@@ -340,20 +199,6 @@
 
     @include media (">=sm") {
       display: inline-block;
-
-      &:not(:last-child) {
-        margin-right: $spacer;
-
-        &:before {
-          content: "/";
-          display: inline-block;
-          position: absolute;
-          top: 50%;
-          right: -$spacer;
-          transform: translate3d(-50%, -50%, 0);
-          color: $brand-primary;
-        }
-      }
     }
 
     &.nav-my-account {
@@ -402,7 +247,7 @@
     padding: $spacer*1.5 $spacer $spacer;
     font-size: 18px/$font-size-root*1rem;
     font-family: $font-family-headings;
-    font-weight: 500;
+    font-weight: 400;
     color: $gray-light;
     text-transform: uppercase;
 

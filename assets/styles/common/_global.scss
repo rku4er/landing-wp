@@ -64,10 +64,21 @@ body {
 }
 
 
+
+/*
+ * Labels
+ */
 label {
    display: inline;
 }
 
+
+/*
+ * Lists
+ */
+ul, ol {
+  padding-left: $spacer;
+}
 
 
 /*
@@ -114,9 +125,8 @@ a {
   position: relative;
   font-family: $font-family-headings;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 1.25rem;
-  min-width: 150px;
 }
 
 /*
@@ -169,8 +179,11 @@ a {
  */
 .section {
    position: relative;
-   padding-top: $grid-gutter-width*2;
-   padding-bottom: $grid-gutter-width*3;
+   padding-top: $grid-gutter-width;
+
+   &:not(:last-child) {
+      margin-bottom: $grid-gutter-width*2;
+   }
 
    .scroll-btn {
      width: 73px;
@@ -191,6 +204,12 @@ a {
      .icon {
        opacity: .5;
      }
+
+     @include hover-focus {
+       .icon {
+         opacity: 1;
+       }
+     }
    }
 }
 
@@ -208,10 +227,21 @@ a {
  * Section title
  */
 .section-title {
-  margin: 0 0 2rem;
-  color: #fff;
+  margin: 0 0 1em;
   padding: $spacer/2 $grid-gutter-width;
-  @include gradient-horizontal(darken($brand-primary, 10%), transparent);
+  position: relative;
+
+  &:before {
+     content: "";
+     display: block;
+     position: absolute;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     height: 3px;
+     overflow: hidden;
+     @include gradient-horizontal(darken($brand-primary, 10%), transparent);
+  }
 }
 
 
@@ -220,7 +250,7 @@ a {
  */
 .section-content {
   @include clearfix();
-  padding: $grid-gutter-width $grid-gutter-width/2;
+  padding: $grid-gutter-width $grid-gutter-width/2 $grid-gutter-width*3;
   background-color: #fff;
 }
 
@@ -563,15 +593,14 @@ a {
 
     }
 
-    .title {
-        margin-left: $grid-gutter-width*2;
-        margin-right: $grid-gutter-width*2;
+    h3 {
+        margin: 0 $grid-gutter-width*2;
         font-family: $font-family-sans-serif;
         text-align: center;
-        margin-bottom: 0;
         font-size: $font-size-base*1.125;
         padding-top: $spacer*2;
-        padding-bottom: $spacer*1.5;
+        padding-bottom: $spacer*2;
+        text-transform: none;
 
         @include media (">=sm") {
             margin-left: $grid-gutter-width/2;
@@ -585,30 +614,31 @@ a {
 .section-blog {
 
     .article-list {
-        @include list-unstyled();
-        @include make-row(0);
-        margin: 0;
-        align-content: flex-start;
-        position: relative;
+      @include list-unstyled();
+      @include make-row(0);
+      margin: 0;
+      align-content: flex-start;
+      position: relative;
 
-        li {
-            @include make-col();
-            @include make-col-span(12);
+      li {
+        @include make-col();
+        @include make-col-span(12);
 
-            @include media (">=md") {
-                @include make-col-span(6);
-            }
-
-            @include media (">=xl") {
-                @include make-col-span(4);
-            }
-
-            @include transition(opacity .2s ease-out);
-
-          article {
-            padding: $grid-gutter-width 0;
-          }
+        @include media (">=md") {
+            @include make-col-span(6);
         }
+
+        @include media (">=xl") {
+            @include make-col-span(4);
+        }
+
+        @include transition(opacity .2s ease-out);
+
+        article {
+           padding-bottom: $grid-gutter-width;
+        }
+
+      }
     }
 
     .thumb {
@@ -616,18 +646,20 @@ a {
       padding-bottom: 60%;
       height: 0;
       margin-bottom: $spacer*1.5;
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 2px solid $gray-lightest;
+        padding: $spacer/2;
+      }
     }
 
-    .wp-post-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .title {
+    h3 {
         font-size: $font-size-base*1.3125;
         font-weight: 600;
         margin-bottom: .5em;
@@ -638,7 +670,7 @@ a {
         line-height: 1.65;
 
         .more {
-            font-weight: 700;
+            font-weight: 400;
             white-space: nowrap;
         }
     }
@@ -649,6 +681,7 @@ a {
 
         button {
             @extend .btn;
+            @extend .btn-sm;
             @extend .btn-primary-outline;
             @include transition(color .2s ease-out);
 

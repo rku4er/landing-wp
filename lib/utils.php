@@ -362,11 +362,9 @@ EOT;
 
     if($bg_color) {
       $down_icon_style['fill'] = sage_complementary_color($bg_color);
-      $down_link_style['color'] = sage_complementary_color($bg_color);
       $down_link_style['background-color'] = $bg_color;
     } else {
       $down_icon_style['fill'] = '#464646';
-      $down_link_style['color'] = '#464646';
       $down_link_style['background-color'] = '#ffffff';
     }
 
@@ -382,7 +380,7 @@ EOT;
           {$section_content_html}
         </div>
         <a href="#{$scroll_target}" class="nav-link scroll-btn" style="{$down_link_style}">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" style="{$down_icon_style}"><use xlink:href="#down-thin"></use></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#down-thin" style="{$down_icon_style}"></use></svg>
         </a>
       </div>
 EOT;
@@ -438,17 +436,15 @@ function sage_header_logo() {
 
     $tag = (is_front_page()) ? 'h1' : 'strong'; ?>
 
-    <div class="navbar-brand-wrapper">
-      <a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>" title="<?php echo get_bloginfo('name'); ?>">
-        <?php if (has_site_icon()) : ?>
-          <img class="brand-img" src="<?php echo get_site_icon_url(190); ?>" alt="<?php echo get_bloginfo('name'); ?>">
-        <?php endif; ?>
-        <div class="brand-text">
-          <<?php echo $tag; ?>><?php echo get_bloginfo('title'); ?></<?php echo $tag; ?>>
-          <p><?php echo get_bloginfo('description'); ?></p>
-        </div>
-      </a>
-    </div>
+    <a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>" title="<?php echo get_bloginfo('name'); ?>">
+      <?php if (has_site_icon()) : ?>
+        <img class="brand-img" src="<?php echo get_site_icon_url(190); ?>" alt="<?php echo get_bloginfo('name'); ?>">
+      <?php endif; ?>
+      <div class="brand-text">
+        <<?php echo $tag; ?>><?php echo get_bloginfo('title'); ?></<?php echo $tag; ?>>
+        <p><?php echo get_bloginfo('description'); ?></p>
+      </div>
+    </a>
 
 <?php }
 

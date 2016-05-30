@@ -191,6 +191,8 @@
             var target = $($(this).attr('href'));
 
             if(target.length){
+                $('#nav-menu').collapse('hide');
+
                 var offset = Math.round(target.offset().top - $('.navbar-sticky').outerHeight() - $('.navbar-sticky-top').outerHeight() - $('#wpadminbar').outerHeight());
                 $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
             }
@@ -217,9 +219,11 @@
           var carousel = $(this),
           width = carousel.innerWidth();
 
-          if (width >= 722) {
+          if (width >= 990) {
+            width = width / 4;
+          } else if (width >= 790) {
             width = width / 3;
-          } else if (width >= 528) {
+          } else if (width >= 570) {
             width = width / 2;
           }
 
