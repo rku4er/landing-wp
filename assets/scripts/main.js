@@ -196,10 +196,13 @@
             var target = $($(this).attr('href'));
 
             if(target.length){
-                $('#nav-menu').collapse('hide');
+              $('#nav-menu').collapse('hide');
 
+              setTimeout(function(){
                 var offset = Math.round(target.offset().top - $('.navbar-sticky').outerHeight() - $('.navbar-sticky-top').outerHeight() - $('#wpadminbar').outerHeight());
                 $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
+              }, 200);
+
             }
 
             e.preventDefault();

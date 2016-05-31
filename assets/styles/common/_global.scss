@@ -207,12 +207,16 @@ a {
    position: relative;
    @include transition(min-height .2s ease-out);
    min-height: 100vh;
-   padding-top: $grid-gutter-width;
-   padding-bottom: $grid-gutter-width;
+
+   padding-top: $grid-gutter-width/2;
+   padding-bottom: $grid-gutter-width/2;
 
    @include media (">=sm") {
      @include make-row(0);
      align-items: center;
+
+     padding-top: $grid-gutter-width;
+     padding-bottom: $grid-gutter-width;
    }
 
    &:not(:last-child) {
@@ -297,14 +301,14 @@ a {
   @include clearfix();
   background-color: rgba(255,255,255,.8);
 
-  padding: $grid-gutter-width/4;
+  padding: $grid-gutter-width/4 $grid-gutter-width/4 $grid-gutter-width;
 
   > .row {
      @include make-row($grid-gutter-width/4);
   }
 
   @include media (">=sm") {
-    padding: $grid-gutter-width/2;
+    padding: $grid-gutter-width/2 $grid-gutter-width/2 $grid-gutter-width;
 
     > .row {
        @include make-row($grid-gutter-width/2);
