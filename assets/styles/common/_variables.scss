@@ -135,7 +135,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns:               12;
-$grid-gutter-width:          1.875rem; // 30px
+$grid-gutter-width:          3.75rem; // 30px
 
 
 // Typography
@@ -239,7 +239,7 @@ $table-border-color:            $gray-lighter;
 //
 // For each of Bootstrap's buttons, define text, background and border color.
 
-$btn-padding-x:                  1rem;
+$btn-padding-x:                  2rem;
 $btn-padding-y:                  .375rem;
 $btn-font-weight:                normal;
 
@@ -269,7 +269,7 @@ $btn-danger-border:              $btn-danger-bg;
 
 $btn-link-disabled-color:        $gray-light;
 
-$btn-padding-x-sm:               .75rem;
+$btn-padding-x-sm:               1rem;
 $btn-padding-y-sm:               .25rem;
 
 $btn-padding-x-lg:               1.25rem;
@@ -363,6 +363,8 @@ $zindex-modal:             1050;
 
 
 // Navbar
+
+$navbar-height:                     70px;
 
 $navbar-border-radius:              $border-radius;
 $navbar-padding-horizontal:         0;

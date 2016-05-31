@@ -109,6 +109,9 @@
           // fire dropdown align plugin
           $('.navbar-nav .nav-item-has-children').dropdownAlign();
 
+          // fullscreen sections
+          $('.section').css({ 'min-height' : $(window).height() - $('.navbar').height() });
+
         }, 100);
 
 
@@ -167,6 +170,8 @@
          * ripples
          */
         $([
+          ".jcarousel-control-prev",
+          ".jcarousel-control-next",
           ".navbar-toggler",
           ".nav-link",
           ".btn"
@@ -219,11 +224,11 @@
           var carousel = $(this),
           width = carousel.innerWidth();
 
-          if (width >= 990) {
+          if (width >= 1020) {
             width = width / 4;
-          } else if (width >= 790) {
+          } else if (width >= 820) {
             width = width / 3;
-          } else if (width >= 570) {
+          } else if (width >= 660) {
             width = width / 2;
           }
 

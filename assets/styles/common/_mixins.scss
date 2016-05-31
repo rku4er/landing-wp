@@ -52,59 +52,8 @@
 }
 
 
-@mixin hexagon($size_x: 100px, $size_y: 120px, $color-1: $brand-primary, $color-2: $brand-primary) {
-
-  position: relative;
-  z-index: 1;
-  width: $size_y;
-  height: $size_x;
-
-  &:before,
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 0;
-    width: $size_y;
-    transform-origin: 50% 100%;
-    border-left: $size_y/4 solid transparent;
-    border-right: $size_y/4 solid transparent;
-    z-index: -1;
-  }
-
-  &:before {
-    border-bottom: $size_x/2 solid $color-2;
-    transform: rotate(90deg);
-  }
-
-  &:after {
-    border-bottom: $size_x/2 solid $color-1;
-    transform: rotate(-90deg);
-  }
-}
-
-
-@mixin text-inputs() {
-  & input[type="color"],
-  & input[type="date"],
-  & input[type="datetime"],
-  & input[type="datetime-local"],
-  & input[type="email"],
-  & input[type="file"],
-  & input[type="number"],
-  & input[type="month"],
-  & input[type="password"],
-  & input[type="range"],
-  & input[type="search"],
-  & input[type="tel"],
-  & input[type="text"],
-  & input[type="time"],
-  & input[type="url"],
-  & input[type="week"],
-  & select,
-  & textarea {
-     @content;
-  }
+@mixin gradient-horizontal-four-colors($start-color: transparent, $mid-color-1: $brand-primary, $color-stop-1: 30%, $mid-color-2: $brand-primary, $color-stop-2: 70%, $end-color: transparent) {
+  background-image: linear-gradient(to right, $start-color, $mid-color-1 $color-stop-1, $mid-color-2 $color-stop-2, $end-color);
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 gets no color-stop at all for proper fallback
 }

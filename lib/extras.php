@@ -262,43 +262,6 @@ function prefix_custom_site_icon_tag( $meta_tags ) {
 
 
 /**
- * Gravity forms
- */
-add_action('sage/get_contact_form', __NAMESPACE__ . '\\sage_contact_form');
-
-function sage_contact_form() {
-
-  if (!is_page()) return;
-
-  $options = Utils\sage_get_options();
-  $form_id = $options['contact_form'];
-
-  if( $form_id ) {
-    $icon      = sprintf('<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-%1$s"><use xlink:href="#%1$s"></use></svg>', 'email');
-    $text_1    = __('Contact', 'sage');
-    $text_2    = __('Me', 'sage');
-    $form_html = do_shortcode('[gravityform id="' . $form_id . '" title="false" description="false" ajax="true"]');
-
-    echo <<<EOT
-      <div id="contact-form" class="contact-form">
-        <div class="inner">
-          <div class="column">
-            <header>
-              <span class="hexagon">{$icon}</span>
-              <h5 class="form-title">{$text_1} <span>{$text_2}</span></h5>
-            </header>
-          </div>
-          <div class="column">
-            {$form_html}
-          </div>
-        </div>
-      </div>
-EOT;
-  }
-}
-
-
-/**
  * AJAX Blog posts
  */
 

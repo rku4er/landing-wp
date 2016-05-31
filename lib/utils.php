@@ -162,7 +162,6 @@ function sage_get_row_content ( $row, $args = array() ) {
 
   $output        = '';
   $layout        = $row['acf_fc_layout'];
-  $scroll_target = $row['next_sibling_id'];
   $prefix        = $layout .'_';
   $section_id    = $row['section_id'] ? $row['section_id'] : uniqid($prefix);
   $section_title = $row['section_title'];
@@ -187,25 +186,14 @@ function sage_get_row_content ( $row, $args = array() ) {
     if ($bg_attachment) $section_style .= sprintf('background-attachment: %s; ', $bg_attachment);
   }
 
-  if ($layout === 'contact' && $row['contact']) {
+  if ($layout === 'contact' && $row['contact_form']) {
 
-    $contacts = array();
-
-    foreach ($row['contact'] as $item) {
-      $contacts[] = <<<EOT
-        <li>
-          <span class="hexagon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-{$item['icon']}">
-              <use xlink:href="#{$item['icon']}"></use>
-            </svg>
-          </span>
-          <h2 class="title">{$item['title']}</h2>
-          <div class="content">{$item['content']}</div>
-        </li>
-EOT;
-    }
-
-    $sections[] = sprintf('<div class="section-content"><ul class="contacts">%s</ul></div>', implode('', $contacts));
+    $icon       = sprintf('<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-%1$s"><use xlink:href="#%1$s"></use></svg>', 'email');
+    $text_1     = __('Contact', 'sage');
+    $text_2     = __('Me', 'sage');
+    $form       = do_shortcode('[gravityform id="' . $row['contact_form']->id . '" title="false" description="false" ajax="true"]');
+    $form_html  = sprintf('<div id="contact-form" class="contact-form">%s</div>', $form);
+    $sections[] = sprintf('<div class="section-content">%s</div>', $form_html);
 
   } elseif ($layout === 'portfolio' && $row['carousel']) {
 
@@ -217,7 +205,7 @@ EOT;
 
         <li>
             <div class="thumb-wrapper">
-                <a href="{$item['url']}">
+                <a href="{$item['url']}" target="_blank">
                     <img src="{$item['thumb']}" alt="{$item['title']}">
                 </a>
             </div>
@@ -230,7 +218,8 @@ EOT;
 
     $sections[] = <<<EOT
 
-      <div id="{$carouselID}" class="portfolio-carousel section-content">
+    <div class="section-content">
+      <div id="{$carouselID}" class="portfolio-carousel">
         <div class="jcarousel">
           <ul>{$portfolio}</ul>
         </div>
@@ -241,6 +230,7 @@ EOT;
           <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#next-thin"></use></svg>
         </button>
       </div>
+    </div>
 EOT;
 
   } elseif ($layout === 'testimonials' && $row['carousel']) {
@@ -357,31 +347,34 @@ EOT;
     $content_style        = $content_color ? sprintf('style="color: %s"', $content_color) : '';
     $section_title_html   = $section_title ? sage_get_heading('h2', $section_title) : '';
     $section_content_html = implode('', $sections);
-    $down_link_style      = array();
-    $down_icon_style      = array();
+    $scroll_link_style      = array();
+    $scroll_icon_style      = array();
 
     if($bg_color) {
-      $down_icon_style['fill'] = sage_complementary_color($bg_color);
-      $down_link_style['background-color'] = $bg_color;
+      $scroll_icon_style['fill'] = sage_complementary_color($bg_color);
+      $scroll_link_style['background-color'] = $bg_color;
     } else {
-      $down_icon_style['fill'] = '#464646';
-      $down_link_style['background-color'] = '#ffffff';
+      $scroll_icon_style['fill'] = '#464646';
+      $scroll_link_style['background-color'] = '#ffffff';
     }
 
-    array_walk($down_link_style, function(&$a, $b) { $a = "$b: $a"; });
-    array_walk($down_icon_style, function(&$a, $b) { $a = "$b: $a"; });
-    $down_link_style = implode('; ', $down_link_style);
-    $down_icon_style = implode('; ', $down_icon_style);
+    array_walk($scroll_link_style, function(&$a, $b) { $a = "$b: $a"; });
+    array_walk($scroll_icon_style, function(&$a, $b) { $a = "$b: $a"; });
+    $scroll_link_style = implode('; ', $scroll_link_style);
+    $scroll_icon_style = implode('; ', $scroll_icon_style);
+
+    $scroll_target = $row['next_sibling_id'];
+    $scroll_icon_image = $scroll_target === 'document' ? 'up-thin' : 'down-thin';
 
     return <<<EOT
       <div id="{$section_id}" class="section section-{$layout}" style="{$section_style}">
         <div class="section-wrapper" {$content_style}>
           {$section_title_html}
           {$section_content_html}
+          <a href="#{$scroll_target}" class="nav-link scroll-btn" style="{$scroll_link_style}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#{$scroll_icon_image}" style="{$scroll_icon_style}"></use></svg>
+          </a>
         </div>
-        <a href="#{$scroll_target}" class="nav-link scroll-btn" style="{$down_link_style}">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon"><use xlink:href="#down-thin" style="{$down_icon_style}"></use></svg>
-        </a>
       </div>
 EOT;
 
@@ -414,9 +407,9 @@ function sage_flexible_content($field_name = 'sections') {
 
     // pass next sibling id
     $index           = ++$i;
-    $next_sibling = isset($field_data[$index]) ? $field_data[$index] : array('section_id' => 'contact-form');
+    $next_sibling = isset($field_data[$index]) ? $field_data[$index] : array();
 
-    $field['next_sibling_id'] = array_key_exists('section_id', $next_sibling) ? $next_sibling['section_id'] : '-1';
+    $field['next_sibling_id'] = array_key_exists('section_id', $next_sibling) ? $next_sibling['section_id'] : 'document';
 
     // collect layout content
     $content[] = sage_get_row_content($field);
@@ -487,7 +480,7 @@ function sage_get_heading($tag = 'h1', $title = null) {
 
   $title = $title ? $title : Titles\title();
 
-  return sprintf('<%1$s class="section-title">%2$s</%1$s>', $tag, $title);
+  return sprintf('<%1$s class="section-title"><span>%2$s</span></%1$s>', $tag, $title);
 
 }
 

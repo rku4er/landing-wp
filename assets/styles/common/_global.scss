@@ -1,7 +1,7 @@
 /*
  * Play icon
  */
-$icon-play: svg-inline('<svg x="0" y="0" viewBox="0 0 163.861 163.861"><style>path{fill:white;}</style><path d="M34.857,3.613C20.084-4.861,8.107,2.081,8.107,19.106v125.637c0,17.042,11.977,23.975,26.75,15.509L144.67,97.275 c14.778-8.477,14.778-22.211,0-30.686L34.857,3.613z"/></svg>');
+$icon-external-link: svg-inline('<svg x="0" y="0"  width="16" height="16" viewBox="0 0 16 16"><style>path{fill:white;}</style><path d="M14 16v-11l-1 1v9h-12v-12h9l1-1h-11v14z M16 0h-5l1.8 1.8-6.8 6.8 1.4 1.4 6.8-6.8 1.8 1.8z"/></svg>');
 
 /*
  * Set wich breakpoints object to use
@@ -89,7 +89,10 @@ ul, ol {
   padding-left: $grid-gutter-width/2;
   padding-right: $grid-gutter-width/2;
   position: relative;
-  flex: 1 1 0;
+
+  @include media (">=sm") {
+    flex: 1 1 0;
+  }
 }
 
 
@@ -99,7 +102,6 @@ ul, ol {
  */
 h1, h2, h3, h4, h5, h6 {
   margin: 1em 0;
-  text-transform: uppercase;
 }
 
 
@@ -125,7 +127,6 @@ a {
   position: relative;
   font-family: $font-family-headings;
   text-transform: uppercase;
-  font-weight: 400;
   font-size: 1.25rem;
 }
 
@@ -150,23 +151,48 @@ a {
       margin-bottom: $grid-gutter-width;
     }
 
-    padding-left: 180px;
+    @include media (">=sm") {
+      padding-left: 200px;
+    }
+
+    @include media (">=lg") {
+      padding-left: 250px;
+    }
 
     img {
-       float: left;
-       margin-left: -180px;
+      @include media ("<sm") {
+        margin-bottom: $spacer;
+        width: 100%;
+      }
+
+      @include media (">=sm") {
+        float: left;
+        margin-left: -200px;
+      }
     }
 
     h2 {
       margin-top: 0;
       margin-bottom: 1rem;
     }
+
+    p {
+       margin-bottom: 0;
+    }
   }
 }
 
 
 /*
- * Content space
+ * Main wrapper
+ */
+.wrap {
+  background: url(../images/page-bg.png) repeat 50% 0 fixed;
+}
+
+
+/*
+ * Page content
  */
 .page-content {
   padding-top: $grid-gutter-width;
@@ -179,37 +205,18 @@ a {
  */
 .section {
    position: relative;
+   @include transition(min-height .2s ease-out);
+   min-height: 100vh;
    padding-top: $grid-gutter-width;
+   padding-bottom: $grid-gutter-width;
+
+   @include media (">=sm") {
+     @include make-row(0);
+     align-items: center;
+   }
 
    &:not(:last-child) {
       margin-bottom: $grid-gutter-width*2;
-   }
-
-   .scroll-btn {
-     width: 73px;
-     height: 73px;
-     @include border-radius(50%);
-     @include box-shadow(0 4px 0 rgba(0,0,0,.05));
-     display: flex;
-     align-items: center;
-     justify-content: center;
-
-     position: absolute;
-     top: 100%;
-     left: 50%;
-     z-index: 1;
-
-     transform: translate3d(-50%,-70%,0);
-
-     .icon {
-       opacity: .5;
-     }
-
-     @include hover-focus {
-       .icon {
-         opacity: 1;
-       }
-     }
    }
 }
 
@@ -220,6 +227,35 @@ a {
 .section-wrapper {
   @include make-container(0);
   @include make-container-max-widths();
+  position: relative;
+  @include make-col-span(12);
+
+  .scroll-btn {
+    width: 73px;
+    height: 73px;
+    @include border-radius(50%);
+    @include box-shadow(0 4px 0 rgba(0,0,0,.05));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 2;
+
+    transform: translate3d(-50%,-60%,0);
+
+    .icon {
+      opacity: .5;
+    }
+
+    @include hover-focus {
+      .icon {
+        opacity: 1;
+      }
+    }
+  }
 }
 
 
@@ -227,21 +263,30 @@ a {
  * Section title
  */
 .section-title {
-  margin: 0 0 1em;
-  padding: $spacer/2 $grid-gutter-width;
-  position: relative;
+  margin: 0 auto 1em;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0px #fff;
 
-  &:before {
-     content: "";
-     display: block;
-     position: absolute;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     height: 3px;
-     overflow: hidden;
-     @include gradient-horizontal(darken($brand-primary, 10%), transparent);
+  span {
+    display: inline-block;
+    padding: $spacer $grid-gutter-width;
+    position: relative;
+
+    &:before {
+       content: "";
+       display: block;
+       position: absolute;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       height: 3px;
+       overflow: hidden;
+       @include gradient-horizontal-four-colors(transparent, $brand-primary, 30%, $brand-primary, 70%, transparent);
+    }
+
   }
+
 }
 
 
@@ -250,8 +295,29 @@ a {
  */
 .section-content {
   @include clearfix();
-  padding: $grid-gutter-width $grid-gutter-width/2 $grid-gutter-width*3;
-  background-color: #fff;
+  background-color: rgba(255,255,255,.8);
+
+  padding: $grid-gutter-width/4;
+
+  > .row {
+     @include make-row($grid-gutter-width/4);
+  }
+
+  @include media (">=sm") {
+    padding: $grid-gutter-width/2;
+
+    > .row {
+       @include make-row($grid-gutter-width/2);
+    }
+  }
+
+  @include media (">=lg") {
+    padding: $grid-gutter-width;
+
+    > .row {
+       @include make-row($grid-gutter-width);
+    }
+  }
 }
 
 
@@ -259,174 +325,25 @@ a {
  * Contact Form
  */
 .contact-form {
-  overflow: hidden !important;
-  background-color: $gray;
-  background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 2px, transparent 6px);
-  color: #fff;
-
-  .inner {
-    @include make-container();
-
-    @include media (">=md") {
-      @include make-row(auto);
-      @include make-container-max-widths();
-
-      position: relative;
-      z-index: 1;
-
-      &:before,
-      &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        width: 9999px;
-        z-index: -1;
-      }
-
-      &:before {
-        right: 66.66666%;
-        background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 2px, transparent 6px);
-        background-color: $gray-lighter;
-        height: 100%;
-      }
-
-      &:after {
-        left: 33.33333%;
-        top: 50%;
-        transform: translate3d(0, -50%, 0);
-        width: 0;
-        height: 0;
-        border-top: $spacer*1.25 solid transparent;
-        border-left: $spacer*1.25 solid $gray-lighter; 
-        border-bottom: $spacer*1.25 solid transparent;
-      }
-    }
-
-  }
-
-  .column {
-     @include make-col(0);
-
-     @include media ("<md") {
-       margin-left: -$grid-gutter-width/2;
-       margin-right: -$grid-gutter-width/2;
-     }
-
-     @include media (">=md") {
-       @include make-row(0);
-       align-items: center;
-       justify-content: center;
-
-       &:nth-child(1) {
-         @include make-col-span(4);
-       }
-
-       &:nth-child(2) {
-         @include make-col-span(8);
-       }
-     }
-  }
-
-  header {
-    padding: 30px;
-
-    @include media ("<md") {
-      background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 2px, transparent 6px);
-      background-color: $gray-lighter;
-      background-position: 50% 0;
-      @include make-row(0);
-      align-items: center;
-      justify-content: center;
-    }
-
-    @include media (">=md") {
-      @include make-col-span(12);
-    }
-
-    .form-title {
-      text-transform: uppercase;
-      color: #fff;
-      font-size: 30px/$font-size-root*1rem;
-      white-space: nowrap;
-      margin: 2rem 0;
-
-      @include media (">=md") {
-        text-align: center;
-        margin-bottom: 0;
-      }
-
-      span {
-        color: $gray;
-      }
-    }
-  }
-
-  .gform_wrapper,
-  .gforms_confirmation_message {
-    padding: $grid-gutter-width*2 $grid-gutter-width;
-  }
+  padding: $grid-gutter-width/2 0;
 
   .gforms_confirmation_message {
     text-align: center;
   }
 
-  .ginput_container {
-    @include text-inputs() {
-      background-color: $gray-lighter;
-      border-color: $gray-lighter;
-    }
-  }
-
-  .gform_body {
-    @include make-row(0);
-    flex-direction: column;
-    justify-content: center;
-
-    @include media (">=lg") {
-      flex-direction: row;
-    }
-  }
-
-
   .gform_fields {
     margin-bottom: $spacer*2;
     @include clearfix();
-
-    @include media (">=lg") {
-      @include make-col(0);
-    }
-
-    &:nth-child(2n) {
-      @include media (">=lg") {
-        margin-left: $spacer;
-      }
-
-      @include media (">=xl") {
-        margin-left: $spacer*2;
-      }
-
-    }
   }
 
   .gfield {
     width: 300px;
     max-width: 100%;
-
-    @include media ("<md") {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    @include media (">=lg") {
-       width: 260px;
-    }
-
-    @include media (">=xl") {
-       width: 320px;
-    }
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .gfield_html {
+  .gfield_label {
      display: none;
   }
 
@@ -444,64 +361,35 @@ a {
 
 
 /*
- * Hexagon
- */
-.hexagon {
-  @include hexagon(100px, 110px, darken($brand-primary, 5%), lighten($brand-primary, 5%));
-
-  @include make-row(auto);
-  align-items: center;
-  justify-content: center;
-
-  @include media ("<md") {
-    margin-right: $spacer;
-  }
-
-  @include media (">=md") {
-    margin: auto;
-  }
-
-  .icon {
-    use {
-      fill: #fff;
-    }
-  }
-}
-
-
-/*
  * Portfolio
  */
 .portfolio-carousel {
     position: relative;
 
-    @include media (">=sm") {
-        padding-left: $grid-gutter-width*2;
-        padding-right: $grid-gutter-width*2;
-    }
-
-    @include media (">=md") {
-        padding-left: $grid-gutter-width*2.5;
-        padding-right: $grid-gutter-width*2.5;
-    }
-
     .icon {
         fill: darken($gray-light, 2%);
     }
 
+    .jcarousel li {
+      padding-top: $grid-gutter-width/2;
+      padding-bottom: $grid-gutter-width/2;
+    }
+
     .jcarousel-control-prev,
     .jcarousel-control-next {
-        background-color: transparent;
+        background-color: #fff;
         border: 0 none;
-        padding: 0;
+        padding: $spacer/2;
         position: absolute;
+        @include border-radius(50%);
+        color: $brand-primary;
 
         top: auto;
-        bottom: 0;
-        height: $grid-gutter-width*2;
+        bottom: $spacer/2;
+        height: $grid-gutter-width;
 
-        @include media (">=sm") {
-            top: 35%;
+        @include media (">=md") {
+            top: 37%;
             bottom: auto;
             transform: translate3d(0,-50%,0);
             height: auto;
@@ -509,6 +397,11 @@ a {
 
         .icon {
             @include transition(fill .2s ease-out);
+
+            @include media ("<md") {
+              width: 40px;
+              height: 40px;
+            }
         }
 
         @include hover-focus {
@@ -519,18 +412,38 @@ a {
     }
 
     .jcarousel-control-prev {
-        left: $spacer;
+      left: 0;
+
+      @include media (">=md") {
+        left: auto;
+        right: 100%;
+      }
+
+      @include media (">=lg") {
+        margin-right: $grid-gutter-width/2;
+      }
     }
 
     .jcarousel-control-next {
-        right: $spacer;
+      right: 0;
+
+      @include media (">=md") {
+        right: auto;
+        left: 100%;
+      }
+
+      @include media (">=lg") {
+        margin-left: $grid-gutter-width/2;
+      }
     }
 
     .thumb-wrapper {
-         margin-left: $grid-gutter-width/2;
-         margin-right: $grid-gutter-width/2;
-         border: 2px solid $gray-lightest;
-         padding: $spacer/2;
+        margin-bottom: $spacer*2;
+
+        @include media (">=sm") {
+          padding-left: $grid-gutter-width/4;
+          padding-right: $grid-gutter-width/4;
+        }
 
         a{
             display: block;
@@ -538,6 +451,7 @@ a {
             overflow: hidden;
             height: 0;
             padding-bottom: 60%;
+            border: 2px solid $gray-lightest;
 
             &:before,
             &:after {
@@ -561,7 +475,7 @@ a {
             &:after {
                 width: 50px;
                 height: 50px;
-                background: url($icon-play) no-repeat 60% 50%;
+                background: url($icon-external-link) no-repeat 60% 50%;
                 background-size: 40% 40%;
 
                 padding: 15px;
@@ -589,22 +503,21 @@ a {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            padding: $spacer/2;
         }
 
     }
 
     h3 {
-        margin: 0 $grid-gutter-width*2;
+        margin: 0;
         font-family: $font-family-sans-serif;
         text-align: center;
         font-size: $font-size-base*1.125;
-        padding-top: $spacer*2;
-        padding-bottom: $spacer*2;
         text-transform: none;
 
-        @include media (">=sm") {
-            margin-left: $grid-gutter-width/2;
-            margin-right: $grid-gutter-width/2;
+        @include media ("<sm") {
+          padding-left: $grid-gutter-width;
+          padding-right: $grid-gutter-width;
         }
     }
 
@@ -616,16 +529,18 @@ a {
     .article-list {
       @include list-unstyled();
       @include make-row(0);
-      margin: 0;
+      margin-bottom: 0;
       align-content: flex-start;
       position: relative;
 
       li {
-        @include make-col();
+        padding-top: $grid-gutter-width/2;
+        padding-bottom: $grid-gutter-width/2;
         @include make-col-span(12);
 
         @include media (">=md") {
-            @include make-col-span(6);
+          @include make-col($spacer*2);
+          @include make-col-span(6);
         }
 
         @include media (">=xl") {
@@ -633,10 +548,6 @@ a {
         }
 
         @include transition(opacity .2s ease-out);
-
-        article {
-           padding-bottom: $grid-gutter-width;
-        }
 
       }
     }
@@ -661,16 +572,14 @@ a {
 
     h3 {
         font-size: $font-size-base*1.3125;
-        font-weight: 600;
         margin-bottom: .5em;
     }
 
     .excerpt {
-        font-size: $font-size-base*1.0625;
+        font-size: $font-size-base;
         line-height: 1.65;
 
         .more {
-            font-weight: 400;
             white-space: nowrap;
         }
     }
