@@ -199,7 +199,7 @@
               $('#nav-menu').collapse('hide');
 
               setTimeout(function(){
-                var offset = Math.round(target.offset().top - $('.navbar-sticky').outerHeight() - $('.navbar-sticky-top').outerHeight() - $('#wpadminbar').outerHeight());
+                var offset = Math.round(target.offset().top - parseInt($('.navbar-sticky').css('min-height')) - $('#wpadminbar').outerHeight());
                 $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
               }, 200);
 
