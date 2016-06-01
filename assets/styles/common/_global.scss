@@ -266,7 +266,7 @@ a {
   .icon-menu {
     transform: translate3d(0, 30px, 0);
     @include toggle-off();
-    border-bottom: 5px solid $brand-primary;
+    border-bottom: 3px solid $brand-primary;
 
     &:before,
     &:after {
@@ -276,7 +276,7 @@ a {
         left: 0;
         width: 100%;
         background-color: $brand-primary;
-        height: 5px;
+        height: 3px;
     }
 
     &:after {
@@ -298,7 +298,7 @@ a {
       width: 80%;
       margin: auto;
       background-color: $brand-primary;
-      height: 4px;
+      height: 2px;
       transform-origin: 50% 50%;
     }
 
@@ -397,8 +397,22 @@ a {
     }
 
     @include media ("<sm") {
+
       &:not(:last-child) {
-        border-bottom: 1px solid darken($gray-lightest, 15%);
+        padding-bottom: 2px;
+
+        &:after {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 70%;
+          height: 2px;
+          overflow: hidden;
+          transform: translate3d(-50%, 0, 0);
+          @include gradient-horizontal-four-colors(transparent, $brand-primary, 30%, $brand-primary, 70%, transparent);
+        }
       }
     }
 
@@ -406,17 +420,6 @@ a {
       display: inline-block;
     }
 
-    &.nav-my-account {
-      > .nav-link {
-        @include media ("<sm") {
-          padding: $spacer*1.8;
-        }
-
-        @include media (">=sm") {
-          padding: $spacer*0.5;
-        }
-      }
-    }
 
     &.active > .nav-link{
       color: $brand-primary;

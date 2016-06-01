@@ -109,8 +109,12 @@
           // fire dropdown align plugin
           $('.navbar-nav .nav-item-has-children').dropdownAlign();
 
+
+          // navbar height helper
+          $('.navbar-sticky').data('height', $('.navbar-sticky').outerHeight());
+
           // fullscreen sections
-          $('.section').css({ 'min-height' : $(window).height() - $('.navbar').height() });
+          $('.section').css({ 'min-height' : $(window).outerHeight() - $('.navbar').outerHeight() });
 
         }, 100);
 
@@ -193,20 +197,34 @@
 
         // Handle hash anchors
         $('.nav-link').on('click', function(e){
+
             var target = $($(this).attr('href'));
 
             if(target.length){
-              $('#nav-menu').collapse('hide');
+              console.log(target);
 
-              setTimeout(function(){
-                var offset = Math.round(target.offset().top - parseInt($('.navbar-sticky').css('min-height')) - $('#wpadminbar').outerHeight());
+              if ($('#nav-menu').hasClass('in')) {
+
+                $('#nav-menu').data('target', target).collapse('hide');
+
+              } else {
+                $('#nav-menu').removeData('target');
+
+                var offset = Math.round(target.position().top - $('.navbar-sticky').data('height') - $('#wpadminbar').outerHeight());
                 $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
-              }, 200);
+              }
 
             }
 
             e.preventDefault();
 
+        });
+
+
+        // menu handler
+        $('#nav-menu').on('hidden.bs.collapse', function () {
+          var offset = Math.round($(this).data('target').position().top - $('.navbar-sticky').data('height') - $('#wpadminbar').outerHeight());
+          $('html,body').animate({ scrollTop: offset }, 1000, 'easeInOutCubic');
         });
 
 
